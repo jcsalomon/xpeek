@@ -84,7 +84,7 @@ This work consists of the file  xpeek.dtx,
 % \DoNotIndex{\bool_set_false:N,\bool_set_true:N}
 % \DoNotIndex{\c_space_token}
 % \DoNotIndex{\cs_new_protected:Npn,\cs_new_protected_nopar:Npn}
-% \DoNotIndex{\cs_to_str:N}
+% \DoNotIndex{\cs_if_exist:cT,\cs_to_str:N}
 % \DoNotIndex{\msg_error:nnnn,\msg_new:nnn,\msg_new:nnnn}
 % \DoNotIndex{\peek_catcode_ignore_spaces:NF}
 % \DoNotIndex{\tl_gput_right:cn,\tl_gremove_all:cn}
@@ -93,6 +93,7 @@ This work consists of the file  xpeek.dtx,
 % \DoNotIndex{\tl_new:c}
 % \DoNotIndex{\token_if_cs_p:N,\token_if_eq_charcode:NNT}
 % \DoNotIndex{\token_to_str:N}
+% \DoNotIndex{\use:c}
 %
 % \title{^^A
 %   The \pkg{\jobname} package^^A
@@ -131,7 +132,7 @@ This work consists of the file  xpeek.dtx,
 % \tableofcontents
 %
 % \begin{documentation}
-% \section{Usage}
+% \section{Basic Usage}
 %
 % This package provides the commands
 % \cs{NewPeekCommand}, \cs{AddToPeekExceptions},
@@ -145,7 +146,7 @@ This work consists of the file  xpeek.dtx,
 %   |\newcommand{\foo}{foo\xpeek}| \\
 %   |\foo \foo x|
 % \end{quote}
-% results in the output
+% yields
 % \begin{quote}
 %   \NewPeekCommand{\xpeek}
 %     {(always)}{(followed)}{(not followed)}
@@ -153,8 +154,7 @@ This work consists of the file  xpeek.dtx,
 %   \newcommand{\foo}{foo\xpeek}
 %   \foo \foo x
 % \end{quote}
-%
-% \section{User commands}
+% as output.
 %
 % \begin{function}{\NewPeekCommand}
 %   \begin{syntax}
@@ -184,30 +184,12 @@ This work consists of the file  xpeek.dtx,
 %   from the exception list for the \meta{function}.
 % \end{function}
 %
-% \section{Messages}
-%
-% \begin{variable}{cs-expected,undeclared-peek-command}
-%   Error messages are defined for some checked errors.
-% \end{variable}
-%
-% \section{Low-level commands}
-%
-% \begin{function}{\NPC_new_peek_command:Nnnn}
-%   This command is used to implement \cs{NewPeekCommand},
-%   without checking that the arguments take the correct form.
-% \end{function}
-%
-% \begin{function}{\NPC_add_to_peek_exceptions:Nn}
-%   This command is used to implement \cs{AddToPeekExceptions},
-%   without checking that the arguments take the correct form.
-% \end{function}
-%
-% \begin{function}{\NPC_remove_from_peek_exceptions:Nn}
-%   This command is used to implement \cs{RemoveFromPeekExceptions},
-%   without checking that the arguments take the correct form.
-% \end{function}
+% \section{Hooks}
 %
 % \begin{function}{\NPC_xpeek_hook:}
+%   \begin{syntax}
+%     \cs{cs_new_protected:Npn} \cs{NPC_xpeek_hook:} \marg{hook}
+%   \end{syntax}
 %   This command
 %   (actually \cs{NPC_\meta{function}_hook:})
 %   is \emph{not} defined by \pkg{\jobname},
@@ -246,16 +228,6 @@ This work consists of the file  xpeek.dtx,
 %   whose manual gives an example of such a case.
 % \end{function}
 %
-% \begin{variable}{\g_xpeek_exceptions_tl}
-%   This token list
-%   (actually \cs{g_\meta{function}_exceptions_tl})
-%   holds the exceptions associated with a particular command.
-% \end{variable}
-%
-% \begin{variable}{\l__NPC_bool}
-%   Internal local variable; see below for usage.
-% \end{variable}
-%
 % \end{documentation}
 %
 % \begin{implementation}
@@ -276,12 +248,16 @@ This work consists of the file  xpeek.dtx,
 %
 % \subsection{User commands}
 %
+% The user-level commands all check their arguments for errors,
+% then call internal functions for their actual implementations.
+%
 % \begin{macro}{\NewPeekCommand}
 %   Check that |#1| is a single control sequence;
 %   that is,
 %   check that |#1| is a token list with exactly one token,
 %   then check that this token is a control sequence.
 %   (The test will fail if |#1| is a single space, but who cares?)
+%
 %   If the input is correct (|T| branch),
 %   call \cs{NPC_new_peek_command:Nnnn};
 %   otherwise raise an error and do nothing.
@@ -300,6 +276,7 @@ This work consists of the file  xpeek.dtx,
 % \begin{macro}{\AddToPeekExceptions}
 %   Check (as above) that |#1| is a single control sequence;
 %   otherwise, raise an error.
+%
 %   Next, check that the exception list exists,
 %   \textit{i.e.},
 %   that the command |#1| was declared with \cs{NewPeekCommand}.
@@ -349,8 +326,8 @@ This work consists of the file  xpeek.dtx,
 %
 % \subsection{Messages}
 %
-% \begin{variable}{cs-expected}
-% The first argument of one of the user functions
+% \begin{macro}[internal]{cs-expected}
+% Used when the first argument of one of the user functions
 % is not a single control sequence:
 %    \begin{macrocode}
 \msg_new:nnnn { NPC } { cs-expected }
@@ -361,11 +338,11 @@ This work consists of the file  xpeek.dtx,
     ~such~as~\token_to_str:N \xspace.
   }
 %    \end{macrocode}
-% \end{variable}
+% \end{macro}
 %
-% \begin{variable}{undeclared-peek-command}
-% The first argument of \cs{AddToPeekExceptions}
-% or \cs{RemoveFromPeekExceptions}
+% \begin{macro}[internal]{undeclared-peek-command}
+% Used when the first argument of
+% \cs{AddToPeekExceptions} or \cs{RemoveFromPeekExceptions}
 % is an unknown control sequence:
 %    \begin{macrocode}
 \msg_new:nnn { NPC } { undeclared-peek-command }
@@ -374,11 +351,11 @@ This work consists of the file  xpeek.dtx,
     \token_to_str:N \NewPeekCommand.
   }
 %    \end{macrocode}
-% \end{variable}
+% \end{macro}
 %
 % \subsection{Low-level commands}
 %
-% \begin{macro}{\NPC_add_to_peek_exceptions:Nn}
+% \begin{macro}[internal]{\NPC_add_to_peek_exceptions:Nn}
 %   Add all the tokens in |#2|
 %   to the list of exceptions for the peek command |#1|.
 %    \begin{macrocode}
@@ -391,7 +368,7 @@ This work consists of the file  xpeek.dtx,
 %    \end{macrocode}
 % \end{macro}
 %
-% \begin{macro}{\NPC_remove_from_peek_exceptions:Nn}
+% \begin{macro}[internal]{\NPC_remove_from_peek_exceptions:Nn}
 %   Remove each the tokens in |#2|
 %   from the list of exceptions for the peek command |#1|.
 %   The loop is present to allow for more than one token in |#2|.
@@ -408,7 +385,7 @@ This work consists of the file  xpeek.dtx,
 %    \end{macrocode}
 % \end{macro}
 %
-% \begin{macro}{\NPC_new_peek_command:Nnnn}
+% \begin{macro}[internal]{\NPC_new_peek_command:Nnnn}
 %   Declare a token list to hold the exceptions for the command |#1|.
 %   Then declare the command |#1|,
 %   which simply calls the internal \cs{__NPC_check:NnTF}
@@ -473,13 +450,21 @@ This work consists of the file  xpeek.dtx,
 %    \end{macrocode}
 % \end{macro}
 %
-% \begin{variable}{\l__NPC_bool}
+% \subsection{Internal Variables}
+%
+% \begin{macro}[internal]{\g_xpeek_exceptions_tl}
+%   This token list
+%   (actually \cs{g_\meta{function}_exceptions_tl})
+%   holds the exceptions associated with a particular command.
+% \end{macro}
+%
+% \begin{macro}[aux]{\l__NPC_bool}
 %   This boolean is used to keep track of whether the \cs{l_peek_token}
 %   appears in the exception list or not.
 %    \begin{macrocode}
 \bool_new:N \l__NPC_bool
 %    \end{macrocode}
-% \end{variable}
+% \end{macro}
 %
 %    \begin{macrocode}
 %</package>
