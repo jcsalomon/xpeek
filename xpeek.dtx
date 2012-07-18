@@ -136,22 +136,22 @@ This work consists of the file  xpeek.dtx,
 % \cs{NewPeekCommand}, \cs{AddToPeekExceptions},
 % and \cs{RemoveFromPeekExceptions}.
 %
-% For example, after the (admittedly silly) declaration
-% \vspace{-0.5\baselineskip}
-% \begin{verbatim}
-%    \NewPeekCommand{\xpeek}
-%      {(always)}{(followed)}{(not followed)}
-%    \AddToPeekExceptions{\xpeek}{x}
-%    \newcommand{\foo}{foo\xpeek}
-% \end{verbatim}
-% \vspace{-0.5\baselineskip}
-% the sequence
+% For example, the (admittedly silly) code
+% \begin{quote}
+% |\NewPeekCommand{\xpeek}| \\
+% |  {(always)}{(followed)}{(not followed)}| \\
+% |\AddToPeekExceptions{\xpeek}{x}| \\
+% |\newcommand{\foo}{foo\xpeek}| \\
 % |\foo \foo x|
-% will yield
-% \NewPeekCommand{\xpeek}{(always)}{(followed)}{(not followed)}
+% \end{quote}
+% results in the output
+% \begin{quote}
+% \NewPeekCommand{\xpeek}
+%   {(always)}{(followed)}{(not followed)}
 % \AddToPeekExceptions{\xpeek}{x}
-% \newcommand*{\foo}{foo\xpeek}
-% \enquote{\foo \foo x}.
+% \newcommand{\foo}{foo\xpeek}
+% \foo \foo x
+% \end{quote}
 %
 % \section{User commands}
 %
