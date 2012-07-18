@@ -186,6 +186,10 @@ This work consists of the file  xpeek.dtx,
 %
 % \section{Hooks}
 %
+% For when the basic \meta{always}\meta{followed}/\meta{not followed}
+% functionality is insufficient,
+% \pkg{\jobname} provides the ability to hook into the execution.
+%
 % \begin{function}{\NPC_xpeek_hook:}
 %   \begin{syntax}
 %     \cs{cs_new_protected:Npn} \cs{NPC_xpeek_hook:} \marg{hook}
@@ -196,6 +200,7 @@ This work consists of the file  xpeek.dtx,
 %   but can optionally be defined by the user.
 %   If defined, it executes after \meta{followed}/\meta{not followed}
 %   and has access to the token stream following the command.
+% \end{function}
 %
 %   To illustrate, add a hook to the silly example from above:
 %   \begin{quote}
@@ -222,11 +227,46 @@ This work consists of the file  xpeek.dtx,
 %   \end{quote}
 %   with the hook’s effect visible in the second line.
 %
-%   This functionality \emph{may} be useful on odd occasions
+%   This functionality may be useful on odd occasions.
+%
+%   For example,
+%   consider a simple analogue to \LaTeX’s \cs{textit} command,
+%   which intelligently inserts italic correction only when needed,
+%   \textit{i.e.}, when not followed by low-height punctuation.
+%   The font-change must be surrounded by
+%   \cs{group_begin:}/\cs{group_end:},
+%   but the italic correction (if present)
+%   must lie within the group.
+%   \begin{quote}
+%     |\ExplSyntaxNamesOn| \\
+%     |\NewDocumentCommand{\xit}{m}| \\
+%     |  {\group_begin:\itshape#1\__xit_cor}| \\
+%     |\NewPeekCommand{\__xit_cor}{}{}{\/}| \\
+%     |\AddToPeekExceptions{\__xit_cor}{.,}| \\
+%     |\cs_new_protected:Npn \NPC___xit_cor_hook: {\group_end:}| \\
+%     |\ExplSyntaxNamesOff| \\
+%     |\xit{f},\quad\xit{f}.\quad\xit{f};\quad\xit{f}!|
+%   \end{quote}
+%   This yields
+%   \begin{quote}
+%     \ExplSyntaxNamesOn
+%     \NewDocumentCommand{\xit}{m}
+%       {\group_begin:\itshape#1\__xit_cor}
+%     \NewPeekCommand{\__xit_cor}{}{}{\/}
+%     \AddToPeekExceptions{\__xit_cor}{.,}
+%     \cs_new_protected:Npn \NPC___xit_cor_hook: {\group_end:}
+%     \ExplSyntaxNamesOff
+%     \xit{f},\quad\xit{f}.\quad\xit{f};\quad\xit{f}!
+%   \end{quote}
+%   with the italic corrections correctly applied.
+%
+%   The \pkg{xspace} package provides similar functionality.
+%   Its manual suggests using hooks for
 %   when further scanning of the input stream is necessary.
-%   I have included it for compatibility with \pkg{xspace}
-%   whose manual gives an example of such a case.
-% \end{function}
+%   (It gives an example of such a case.)
+%
+%   I don’t know how to achieve such scan-ahead,
+%   but I’m open to suggestions.
 %
 % \end{documentation}
 %
