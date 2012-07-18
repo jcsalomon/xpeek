@@ -1,0 +1,16 @@
+*~
+*.aux
+*.cmds
+*.glo
+*.gls
+*.hd
+*.idx
+*.ilg
+*.ind
+*.ins
+*.log
+*.out
+*.pdf
+*.synctex.gz
+*.toc
+xpeek.sty

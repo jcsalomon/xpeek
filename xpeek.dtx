@@ -1,0 +1,453 @@
+% \iffalse meta-comment
+% !TeX program = pdflatex
+% !TeX encoding = utf-8
+% !TeX spellcheck = en_US
+%<*internal>
+\iffalse
+%</internal>
+%<*internal>
+\fi
+\def\nameofplainTeX{plain}
+\ifx\fmtname\nameofplainTeX\else
+  \expandafter\begingroup
+\fi
+%</internal>
+%<*install>
+\input docstrip.tex
+\keepsilent
+\askforoverwritefalse
+\preamble
+----------------------------------------------------------------
+xpeek: Define commands that peek ahead in the input stream
+
+Released under the LaTeX Project Public License v1.3c or later;
+see ‹http://www.latex-project.org/lppl.txt›.
+----------------------------------------------------------------
+\endpreamble
+\postamble
+Copyright © 2012 by Joel C. Salomon ‹joelcsalomon@gmail.com›.
+
+The original code is due to Enrico “egreg” Gregorio, with modifications
+according to suggestions by Enrico, Joseph Wright, & Bruno Le Floch.
+
+This work may be distributed and/or modified under the conditions of
+the LaTeX Project Public License, either version 1.3 of this license
+or (at your option) any later version.
+
+The latest version of this license is at
+  ‹http://www.latex-project.org/lppl.txt›.
+
+This work is “maintained” (per LPPL maintenance status) by
+Joel C. Salomon ‹joelcsalomon@gmail.com›.
+
+This work consists of the file  xpeek.dtx,
+          and the derived files xpeek.ins,
+                                xpeek.pdf, &
+                                xpeek.sty.
+\endpostamble
+\usedir{tex/latex/xpeek}
+\generate{
+  \file{\jobname.sty}{\from{\jobname.dtx}{package}}
+}
+%</install>
+%<install>\endbatchfile
+%<*internal>
+\usedir{source/latex/xpeek}
+\generate{
+  \file{\jobname.ins}{\from{\jobname.dtx}{install}}
+}
+\ifx\fmtname\nameofplainTeX
+  \expandafter\endbatchfile
+\else
+  \expandafter\endgroup
+\fi
+%</internal>
+%<*driver>
+\documentclass[full]{l3doc}
+\usepackage{xpeek}
+\usepackage[utf8]{inputenc}
+\usepackage{framed}
+\begin{document}
+  \DocInput{\jobname.dtx}
+\end{document}
+%</driver>
+% \fi
+%
+% \changes{Version 1.0}{2012/07/17}{Initial version}
+%
+% \GetFileInfo{\jobname.sty}
+%
+% \DoNotIndex{\NewDocumentCommand,\RequirePackage}
+% \DoNotIndex{\ProvidesExplPackage}
+% \DoNotIndex{\bool_if:NTF,\bool_if:nTF,\bool_new:N}
+% \DoNotIndex{\bool_set_false:N,\bool_set_true:N}
+% \DoNotIndex{\c_space_token}
+% \DoNotIndex{\cs_new_protected:Npn,\cs_new_protected_nopar:Npn}
+% \DoNotIndex{\cs_to_str:N}
+% \DoNotIndex{\msg_error:nnnn,\msg_new:nnn,\msg_new:nnnn}
+% \DoNotIndex{\peek_catcode_ignore_spaces:NF}
+% \DoNotIndex{\tl_gput_right:cn,\tl_gremove_all:cn}
+% \DoNotIndex{\tl_if_exist:cF,\tl_if_single_token_p:n}
+% \DoNotIndex{\tl_map_break:,\tl_map_inline:cn,\tl_map_inline:nn}
+% \DoNotIndex{\tl_new:c}
+% \DoNotIndex{\token_if_cs_p:N,\token_if_eq_charcode:NNT}
+% \DoNotIndex{\token_to_str:N}
+%
+% \title{^^A
+%   The \pkg{\jobname} package^^A
+%     \thanks{^^A
+%       This file describes release \fileversion,
+%       last revised \filedate.^^A
+%     }^^A
+% }
+% \author{^^A
+%   Joel C. Salomon\\
+%   ‹\href{mailto:joelcsalomon@gmail.com}{joelcsalomon@gmail.com}›^^A
+%   \thanks
+%     {The original code is due to Enrico \enquote{egreg} Gregorio,
+%       based on an answer he gave to a question of mine on
+%         \href{http://tex.stackexchange.com}{\TeX.SX};
+%       see ‹\href{http://tex.stackexchange.com/a/59542/2966}
+%         {http://tex.stackexchange.com/a/59542/2966}›.
+%       Enrico, Joseph Wright, \& Bruno Le Floch helped
+%       iron out the implementation;
+%       Bruno also wrote the initial version of the documentation.
+%       See ‹\href{http://tex.stackexchange.com/q/63568/2966}
+%         {http://tex.stackexchange.com/q/63568/2966}›.}^^A
+% }
+% \date{Released \filedate}
+%
+% \maketitle
+%
+% \begin{abstract}
+%   The \pkg{\jobname} package defines \cs{NewPeekCommand}.
+%   Commands this macro generates behave like the familiar \cs{xspace};
+%   they peek ahead at what comes after them in the command stream,
+%   compare this against a list of \enquote{exceptions},
+%   and choose what to do depending on whether there was a match.
+% \end{abstract}
+%
+% \tableofcontents
+%
+% \begin{documentation}
+% \section{Usage}
+%
+% This package provides the commands
+% \cs{NewPeekCommand}, \cs{AddToPeekExceptions},
+% and \cs{RemoveFromPeekExceptions}.
+%
+% For example, after the (admittedly silly) declaration
+% \vspace{-0.5\baselineskip}
+% \begin{verbatim}
+%    \NewPeekCommand{\xpeek}
+%      {(always)}{(followed)}{(not followed)}
+%    \AddToPeekExceptions{\xpeek}{x}
+%    \newcommand{\foo}{foo\xpeek}
+% \end{verbatim}
+% \vspace{-0.5\baselineskip}
+% the sequence
+% |\foo \foo x|
+% will yield
+% \NewPeekCommand{\xpeek}{(always)}{(followed)}{(not followed)}
+% \AddToPeekExceptions{\xpeek}{x}
+% \newcommand*{\foo}{foo\xpeek}
+% \enquote{\foo \foo x}.
+%
+% \section{User commands}
+%
+% \begin{function}{\NewPeekCommand}
+%   \begin{syntax}
+%     \cs{NewPeekCommand} \marg{function} \marg{always} \marg{followed} \marg{not followed}
+%   \end{syntax}
+%   Defines the \meta{function} as a new \enquote{peek} command,
+%   one which looks at the following token.
+%   If this token is part of the exception list
+%   (see \cs{AddToPeekExceptions}),
+%   use the \meta{always} and \meta{followed} tokens;
+%   otherwise use the \meta{always} and \meta{not followed} tokens.
+% \end{function}
+%
+% \begin{function}{\AddToPeekExceptions}
+%   \begin{syntax}
+%     \cs{AddToPeekExceptions} \marg{function} \marg{exceptions}
+%   \end{syntax}
+%   Adds every token in the \meta{exceptions}
+%   to the exception list for the \meta{function}.
+% \end{function}
+%
+% \begin{function}{\RemoveFromPeekExceptions}
+%   \begin{syntax}
+%     \cs{RemoveFromPeekExceptions} \marg{function} \marg{exceptions}
+%   \end{syntax}
+%   Removes every token in the \meta{exceptions}
+%   from the exception list for the \meta{function}.
+% \end{function}
+%
+% \section{Messages}
+%
+% \begin{variable}{cs-expected,undeclared-peek-command}
+%   Error messages are defined for some checked errors.
+% \end{variable}
+%
+% \section{Low-level commands}
+%
+% \begin{function}{\NPC_new_peek_command:Nnnn}
+%   This command is used to implement \cs{NewPeekCommand},
+%   without checking that the arguments take the correct form.
+% \end{function}
+%
+% \begin{function}{\NPC_add_to_peek_exceptions:Nn}
+%   This command is used to implement \cs{AddToPeekExceptions},
+%   without checking that the arguments take the correct form.
+% \end{function}
+%
+% \begin{function}{\NPC_remove_from_peek_exceptions:Nn}
+%   This command is used to implement \cs{RemoveFromPeekExceptions},
+%   without checking that the arguments take the correct form.
+% \end{function}
+%
+% \begin{variable}{\g_xpeek_exceptions_tl}
+%   This token list,
+%   with |xpeek| replaced by
+%   the \enquote{peek} command’s name minus the leading backslash,
+%   holds the \enquote{exceptions} for the \enquote{peek} command.
+% \end{variable}
+%
+% \begin{variable}{\l__NPC_bool}
+%   Internal local variable.
+% \end{variable}
+%
+% \end{documentation}
+%
+% \begin{implementation}
+% \section{\pkg{\jobname} Implementation}
+%
+%    \begin{macrocode}
+%<*package>
+%    \end{macrocode}
+%
+% Why is this here?
+%    \begin{macrocode}
+%<@@=<prefix>>
+%    \end{macrocode}
+%
+% Load \pkg{xparse}
+% and enable \texttt{expl} syntax for this package.
+%    \begin{macrocode}
+\RequirePackage{expl3,xparse}
+\ProvidesExplPackage
+  {xpeek} {2012/07/17} {1.0}
+  {Define commands that peek ahead in the input stream}
+%    \end{macrocode}
+%
+% \subsection{User commands}
+%
+% \begin{macro}{\NewPeekCommand}
+%   Check that |#1| is a single control sequence;
+%   that is,
+%   check that |#1| is a token list with exactly one token,
+%   then check that this token is a control sequence.
+%   (The test will fail if |#1| is a single space, but who cares?)
+%   If the input is correct (|T| branch),
+%   call \cs{NPC_new_peek_command:Nnnn};
+%   otherwise raise an error and do nothing.
+%    \begin{macrocode}
+\NewDocumentCommand { \NewPeekCommand } {m m m m}
+  {
+    \bool_if:nTF { \tl_if_single_token_p:n {#1} && \token_if_cs_p:N {#1} }
+      { \NPC_new_peek_command:Nnnn #1 {#2} {#3} {#4} }
+      { \msg_error:nnnn
+          { NPC } { cs-expected } { \NewPeekCommand } {#1}
+      }
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\AddToPeekExceptions}
+%   Check (as above) that |#1| is a single control sequence;
+%   otherwise, raise an error.
+%   Next, check that the exception list exists,
+%   \textit{i.e.},
+%   that the command |#1| was declared with \cs{NewPeekCommand}.
+%   If the input was correct, call \cs{NPC_add_to_peek_exceptions:Nn}.
+%    \begin{macrocode}
+\NewDocumentCommand { \AddToPeekExceptions } { m m }
+  {
+    \bool_if:nTF { \tl_if_single_token_p:n {#1} && \token_if_cs_p:N {#1} }
+      {
+        \tl_if_exist:cF { g_ \cs_to_str:N #1 _exceptions_tl }
+          { \msg_error:nnnn
+              { NPC } { undeclared-peek-command }
+              { \AddToPeekExceptions } {#1}
+            \tl_new:c { g_ \cs_to_str:N #1 _exceptions_tl }
+          }
+        \NPC_add_to_peek_exceptions:Nn #1 {#2}
+      }
+      { \msg_error:nnnn
+          { NPC } { cs-expected } { \NewPeekCommand } {#1}
+      }
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\RemoveFromPeekExceptions}
+%   Check for errors just as for \cs{AddToPeekExceptions},
+%   then call \cs{NPC_remove_from_peek_exceptions:Nn}.
+%    \begin{macrocode}
+\NewDocumentCommand { \RemoveFromPeekExceptions } { m m }
+  {
+    \bool_if:nTF { \tl_if_single_token_p:n {#1} && \token_if_cs_p:N {#1} }
+      {
+        \tl_if_exist:cF { g_ \cs_to_str:N #1 _exceptions_tl }
+          { \msg_error:nnnn
+              { NPC } { undeclared-peek-command }
+              { \AddToPeekExceptions } {#1}
+            \tl_new:c { g_ \cs_to_str:N #1 _exceptions_tl }
+          }
+        \NPC_remove_from_peek_exceptions:Nn #1 {#2}
+      }
+      { \msg_error:nnnn
+          { NPC } { cs-expected } { \NewPeekCommand } {#1}
+      }
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{Messages}
+%
+% \begin{variable}{cs-expected}
+% The first argument of one of the user functions
+% is not a single control sequence:
+%    \begin{macrocode}
+\msg_new:nnnn { NPC } { cs-expected }
+  { The~first~argument~of~#1 must~be~a~control~sequence. }
+  {
+    The~command~#1 received~'#2'~as~its~first~argument,
+    ~instead~of~a~single~control~sequence
+    ~such~as~\token_to_str:N \xspace.
+  }
+%    \end{macrocode}
+% \end{variable}
+%
+% \begin{variable}{undeclared-peek-command}
+% The first argument of \cs{AddToPeekExceptions}
+% or \cs{RemoveFromPeekExceptions}
+% is an unknown control sequence:
+%    \begin{macrocode}
+\msg_new:nnn { NPC } { undeclared-peek-command }
+  {
+    The~first~argument~of~#1 must~be~declared~with~
+    \token_to_str:N \NewPeekCommand.
+  }
+%    \end{macrocode}
+% \end{variable}
+%
+% \subsection{Low-level commands}
+%
+% \begin{macro}{\NPC_add_to_peek_exceptions:Nn}
+%   Add all the tokens in |#2|
+%   to the list of exceptions for the peek command |#1|.
+%    \begin{macrocode}
+\cs_new_protected:Npn \NPC_add_to_peek_exceptions:Nn #1#2
+  {
+    \tl_gput_right:cn
+      { g_ \cs_to_str:N #1 _exceptions_tl }
+      { #2 }
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\NPC_remove_from_peek_exceptions:Nn}
+%   Remove each the tokens in |#2|
+%   from the list of exceptions for the peek command |#1|.
+%   The loop is present to allow for more than one token in |#2|.
+%    \begin{macrocode}
+\cs_new_protected:Npn \NPC_remove_from_peek_exceptions:Nn #1#2
+  {
+    \tl_map_inline:nn {#2}
+      {
+        \tl_gremove_all:cn
+          { g_ \cs_to_str:N #1 _exceptions_tl }
+          { ##1 }
+      }
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\NPC_new_peek_command:Nnnn}
+%   Declare a token list to hold the exceptions for the command |#1|.
+%   Then declare the command |#1|,
+%   which simply calls the internal \cs{__NPC_check:NnTF}
+%   with the appropriate arguments.
+%    \begin{macrocode}
+\cs_new_protected:Npn \NPC_new_peek_command:Nnnn #1#2#3#4
+  {
+    \tl_new:c { g_ \cs_to_str:N #1 _exceptions_tl }
+    \cs_new_protected_nopar:Npn #1
+      { \__NPC_check:NnTF #1 {#2} {#3} {#4} }
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[aux]{\__NPC_check:NnTF}
+%   Peek ahead, ignoring spaces.
+%   This is a clever hack:
+%   it actually checks whether the next non-space token is a space token.
+%   If not (and by definition this will always test false),
+%   call \cs{__NPC_check_ii:NnTF}
+%   with \cs{l_peek_token} set
+%   to the following token in the input stream.
+%    \begin{macrocode}
+\cs_new_protected:Npn \__NPC_check:NnTF #1#2#3#4
+  {
+    \peek_catcode_ignore_spaces:NF \c_space_token
+      { \__NPC_check_ii:NnTF #1 {#2} {#3} {#4} }
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[aux]{\__NPC_check_ii:NnTF}
+%   Given \cs{l_peek_token} set to the following token,
+%   compare it against the list of exceptions for |#1|:
+%   Loop over the exception list,
+%   comparing the character code of each exception to \cs{l_peek_token}.
+%   If there is a match,
+%   turn on the boolean and break the map.
+%   After the loop, leave
+%   either the \meta{always} \& \meta{followed} tokens
+%   or the \meta{always} \& \meta{not followed} tokens
+%   in the input stream.
+%    \begin{macrocode}
+\cs_new_protected:Npn \__NPC_check_ii:NnTF #1#2#3#4
+  {
+    \bool_set_false:N \l__NPC_bool
+    \tl_map_inline:cn { g_\cs_to_str:N #1 _exceptions_tl }
+      {
+        \token_if_eq_charcode:NNT ##1 \l_peek_token
+          {
+            \bool_set_true:N \l__NPC_bool
+            \tl_map_break:
+          }
+      }
+    \bool_if:NTF \l__NPC_bool { #2 #3 } { #2 #4 }
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{variable}{\l__NPC_bool}
+%   This boolean is used to keep track of whether the \cs{l_peek_token}
+%   appears in the exception list or not.
+%    \begin{macrocode}
+\bool_new:N \l__NPC_bool
+%    \end{macrocode}
+% \end{variable}
+%
+%    \begin{macrocode}
+%</package>
+%    \end{macrocode}
+%
+% \end{implementation}
+%
+% \PrintChanges
+%
+% \PrintIndex
