@@ -165,13 +165,16 @@ This work consists of the file  xpeek.dtx,
 % — |(always)| \& |(followed)| —
 % are selected.
 %
-% \section{User commands}
+% \section{User \& low-level commands}
 %
-% The following user-level commands are defined:
+% The user-level commands defined by \pkg{\jobname}
+% are wrappers around corresponding low-level commands.
+% The following user- \& low-level commands are defined:
 %
-% \begin{function}{\NewPeekCommand}
+% \begin{function}{\NewPeekCommand, \NPC_new_peek_command:Nnnn}
 %   \begin{syntax}
 %     \cs{NewPeekCommand} \marg{function} \marg{always} \marg{followed} \marg{not followed}
+%     \cs{NPC_new_peek_command:Nnnn} \meta{function} \marg{always} \marg{followed} \marg{not followed}
 %   \end{syntax}
 %   Defines the \meta{function} as a new \enquote{peek} command,
 %   one which looks at the following token.
@@ -181,17 +184,20 @@ This work consists of the file  xpeek.dtx,
 %   otherwise use the \meta{always} and \meta{not followed} tokens.
 % \end{function}
 %
-% \begin{function}{\AddToPeekExceptions}
+% \begin{function}{\AddToPeekExceptions, \NPC_add_to_peek_exceptions:Nn}
 %   \begin{syntax}
 %     \cs{AddToPeekExceptions} \marg{function} \marg{exceptions}
+%     \cs{NPC_add_to_peek_exceptions:Nn} \meta{function} \marg{exceptions}
 %   \end{syntax}
 %   Adds every token in the \meta{exceptions}
 %   to the exception list for the \meta{function}.
 % \end{function}
 %
-% \begin{function}{\RemoveFromPeekExceptions}
+% \begin{function}
+%   {\RemoveFromPeekExceptions, \NPC_remove_from_peek_exceptions:Nn}
 %   \begin{syntax}
 %     \cs{RemoveFromPeekExceptions} \marg{function} \marg{exceptions}
+%     \cs{NPC_remove_from_peek_exceptions:Nn} \meta{function} \marg{exceptions}
 %   \end{syntax}
 %   Removes every token in the \meta{exceptions}
 %   from the exception list for the \meta{function}.
@@ -281,38 +287,6 @@ This work consists of the file  xpeek.dtx,
 %   but I’m open to suggestions.
 %
 % \end{documentation}
-%
-% \section{Internal commands}
-%
-% \begin{function}{\NPC_new_peek_command:Nnnn}
-%   \begin{syntax}
-%     \cs{NPC_new_peek_command:Nnnn} \meta{function} \marg{always} \marg{followed} \marg{not followed}
-%   \end{syntax}
-%   Defines \meta{function} as a new peek command.
-%   This is the internal version of \cs{NewPeekCommand};
-%   see above.
-% \end{function}
-%
-% \begin{function}{\NPC_add_to_peek_exceptions:Nn}
-%   \begin{syntax}
-%     \cs{NPC_add_to_peek_exceptions:Nn} \meta{function} \marg{exceptions}
-%   \end{syntax}
-%   Adds every token in \meta{exceptions}
-%   to the exception list for \meta{function}.
-%   This is the internal version of \cs{AddToPeekExceptions};
-%   see above.
-
-% \end{function}
-%
-% \begin{function}{\NPC_remove_from_peek_exceptions:Nn}
-%   \begin{syntax}
-%     \cs{NPC_remove_from_peek_exceptions:Nn} \meta{function} \marg{exceptions}
-%   \end{syntax}
-%   Removes every token in \meta{exceptions}
-%   from the exception list for \meta{function}.
-%   This is the internal version of \cs{RemoveFromPeekExceptions};
-%   see above.
-% \end{function}
 %
 % \begin{implementation}
 % \section{\pkg{\jobname} Implementation}
