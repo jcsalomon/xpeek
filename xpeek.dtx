@@ -138,19 +138,19 @@ This work consists of the file  xpeek.dtx,
 %
 % For example, the (admittedly silly) code
 % \begin{quote}
-% |\NewPeekCommand{\xpeek}| \\
-% |  {(always)}{(followed)}{(not followed)}| \\
-% |\AddToPeekExceptions{\xpeek}{x}| \\
-% |\newcommand{\foo}{foo\xpeek}| \\
-% |\foo \foo x|
+%   |\NewPeekCommand{\xpeek}| \\
+%   |  {(always)}{(followed)}{(not followed)}| \\
+%   |\AddToPeekExceptions{\xpeek}{x}| \\
+%   |\newcommand{\foo}{foo\xpeek}| \\
+%   |\foo \foo x|
 % \end{quote}
 % results in the output
 % \begin{quote}
-% \NewPeekCommand{\xpeek}
-%   {(always)}{(followed)}{(not followed)}
-% \AddToPeekExceptions{\xpeek}{x}
-% \newcommand{\foo}{foo\xpeek}
-% \foo \foo x
+%   \NewPeekCommand{\xpeek}
+%     {(always)}{(followed)}{(not followed)}
+%   \AddToPeekExceptions{\xpeek}{x}
+%   \newcommand{\foo}{foo\xpeek}
+%   \foo \foo x
 % \end{quote}
 %
 % \section{User commands}
@@ -213,7 +213,7 @@ This work consists of the file  xpeek.dtx,
 % \end{variable}
 %
 % \begin{variable}{\l__NPC_bool}
-%   Internal local variable.
+%   Internal local variable; see below for usage.
 % \end{variable}
 %
 % \end{documentation}
@@ -415,7 +415,7 @@ This work consists of the file  xpeek.dtx,
 \cs_new_protected:Npn \__NPC_check_ii:NnTF #1#2#3#4
   {
     \bool_set_false:N \l__NPC_bool
-    \tl_map_inline:cn { g_\cs_to_str:N #1 _exceptions_tl }
+    \tl_map_inline:cn { g_ \cs_to_str:N #1 _exceptions_tl }
       {
         \token_if_eq_charcode:NNT ##1 \l_peek_token
           {
