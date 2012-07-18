@@ -455,6 +455,17 @@ This work consists of the file  xpeek.dtx,
       { \__NPC_check_ii:NnTF #1 {#2} {#3} {#4} }
   }
 %    \end{macrocode}
+%
+% (I’d like to define this as scanning for tokens from one list
+% while ignoring tokens from another.
+% An interface something like
+% \begin{quote}
+%   \cs{peek_inlist_ignore_auxlist:nnTF} \\
+%   |  |\marg{test list} \marg{ignore list} \\
+%   |  |\marg{true code} \marg{false code}
+% \end{quote}
+% would be nice.
+% Can anyone help me implement it?)
 % \end{macro}
 %
 % \begin{macro}[aux]{\__NPC_check_ii:NnTF}
