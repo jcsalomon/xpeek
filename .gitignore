@@ -13,4 +13,6 @@
 *.pdf
 *.synctex.gz
 *.toc
+xpeek/
 xpeek.sty
+xpeek*.zip
