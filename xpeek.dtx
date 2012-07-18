@@ -74,6 +74,7 @@ This work consists of the file  xpeek.dtx,
 % \fi
 %
 % \changes{Version 1.0}{2012/07/17}{Initial version}
+% \changes{Version 1.1}{2012/07/18}{Add hooks}
 %
 % \GetFileInfo{\jobname.sty}
 %
@@ -206,6 +207,45 @@ This work consists of the file  xpeek.dtx,
 %   without checking that the arguments take the correct form.
 % \end{function}
 %
+% \begin{function}{\NPC_xpeek_hook:}
+%   This command
+%   (actually \cs{NPC_\meta{function}_hook:})
+%   is \emph{not} defined by \pkg{\jobname},
+%   but can optionally be defined by the user.
+%   If defined, it executes after \meta{followed}/\meta{not followed}
+%   and has access to the token stream following the command.
+%
+%   To illustrate, add a hook to the silly example from above:
+%   \begin{quote}
+%     |\NewPeekCommand{\xpeek}| \\
+%     |  {(always)}{(followed)}{(not followed)}| \\
+%     |\AddToPeekExceptions{\xpeek}{x}| \\
+%     |\newcommand{\foo}{foo\xpeek}| \\
+%     |\foo y \foo x\\| \\
+%     |\ExplSyntaxNamesOn| \\
+%     |\cs_new_protected:Npn \NPC_xpeek_hook:| \\
+%     |  {(next is \exp_not:N \l_peek_token)}| \\
+%     |\ExplSyntaxNamesOff| \\
+%     |\foo y \foo x|
+%   \end{quote}
+%   This will yield
+%   \begin{quote}
+%     \newcommand{\foo}{foo\xpeek}
+%     \foo y \foo x\\
+%     \ExplSyntaxNamesOn
+%     \cs_new_protected:Npn \NPC_xpeek_hook:
+%       {(next is \exp_not:N \l_peek_token)}
+%     \ExplSyntaxNamesOff
+%     \foo y \foo x
+%   \end{quote}
+%   with the hook’s effect visible in the second line.
+%
+%   This functionality \emph{may} be useful on odd occasions
+%   when further scanning of the input stream is necessary.
+%   I have included it for compatibility with \pkg{xspace}
+%   whose manual gives an example of such a case.
+% \end{function}
+%
 % \begin{variable}{\g_xpeek_exceptions_tl}
 %   This token list
 %   (actually \cs{g_\meta{function}_exceptions_tl})
@@ -230,7 +270,7 @@ This work consists of the file  xpeek.dtx,
 %    \begin{macrocode}
 \RequirePackage{expl3,xparse}
 \ProvidesExplPackage
-  {xpeek} {2012/07/17} {1.0}
+  {xpeek} {2012/07/18} {1.1}
   {Define commands that peek ahead in the input stream}
 %    \end{macrocode}
 %
@@ -410,7 +450,9 @@ This work consists of the file  xpeek.dtx,
 %   After the loop, leave
 %   either the \meta{always} \& \meta{followed} tokens
 %   or the \meta{always} \& \meta{not followed} tokens
-%   in the input stream.
+%   in the input stream,
+%   followed by \cs{NPC_\meta{function}_hook:}
+%   if it is defined.
 %    \begin{macrocode}
 \cs_new_protected:Npn \__NPC_check_ii:NnTF #1#2#3#4
   {
@@ -423,7 +465,10 @@ This work consists of the file  xpeek.dtx,
             \tl_map_break:
           }
       }
-    \bool_if:NTF \l__NPC_bool { #2 #3 } { #2 #4 }
+    #2
+    \bool_if:NTF \l__NPC_bool { #3 } { #4 }
+    \cs_if_exist:cT { NPC_ \cs_to_str:N #1 _hook: }
+      { \use:c { NPC_ \cs_to_str:N #1 _hook: } }
   }
 %    \end{macrocode}
 % \end{macro}
