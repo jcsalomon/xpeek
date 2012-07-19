@@ -2,7 +2,7 @@
 ============================================================
 
 The `xpeek` package provides tools to help define commands that,
-like [`xspace`][1], peek at what follows them in the command stream
+like [`\xspace`][1], peek at what follows them in the command stream
 and choose appropriate behavior.
 
 The code is adapted from an answer posted to [TeX.SX][2] by Enrico
