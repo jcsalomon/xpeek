@@ -1,0 +1,154 @@
+% \iffalse meta-comment
+% !TeX program = pdflatex
+% !TeX encoding = utf-8
+% !TeX spellcheck = en_US
+%<*internal>
+\iffalse
+%</internal>
+%<*internal>
+\fi
+\def\nameofplainTeX{plain}
+\ifx\fmtname\nameofplainTeX\else
+  \expandafter\begingroup
+\fi
+%</internal>
+%<*install>
+\input l3docstrip.tex
+\keepsilent
+\askforoverwritefalse
+\preamble
+----------------------------------------------------------------
+
+xpeek: Define commands that peek ahead in the input stream
+
+Copyright © 2012 by Joel C. Salomon.
+
+This work consists of the file  xpeek.dtx,
+          and the derived files xpeek.ins,
+                                xpeek.pdf, &
+                                xpeek.sty.
+It may be distributed and/or modified under the conditions of the
+LaTeX Project Public License (LPPL), either version 1.3c of this
+license or (at your option) any later version.  The latest version
+of this license is at ‹http://www.latex-project.org/lppl.txt›.
+
+This work is “maintained” (per LPPL maintenance status) by
+Joel C. Salomon ‹joelcsalomon@gmail.com›.
+
+----------------------------------------------------------------
+\endpreamble
+\postamble
+\endpostamble
+\usedir{tex/latex/xpeek}
+\generate{
+  \file{\jobname.sty}{\from{\jobname.dtx}{package}}
+}
+%</install>
+%<install>\endbatchfile
+%<*internal>
+\usedir{source/latex/xpeek}
+\generate{
+  \file{\jobname.ins}{\from{\jobname.dtx}{install}}
+}
+\ifx\fmtname\nameofplainTeX
+  \expandafter\endbatchfile
+\else
+  \expandafter\endgroup
+\fi
+%</internal>
+%<*driver>
+\pdfobjcompresslevel=0
+\RequirePackage[utf8]{inputenc}
+\documentclass[full]{l3doc}
+\usepackage{xpeek}
+\begin{document}
+  \DocInput{\jobname.dtx}
+\end{document}
+%</driver>
+% \fi
+%
+% ^^A Set up formatting options
+% \DeclareUrlCommand\url
+%   {\def\UrlLeft##1\UrlRight{‹\href{##1}{##1}›}}
+% \DeclareUrlCommand\email
+%   {\def\UrlLeft##1\UrlRight{‹\href{mailto:##1}{##1}›}}
+% \urlstyle{same}
+%
+% \changes{Version 0.0}{2012/07/17}{Initial version}
+%
+% \GetFileInfo{\jobname.sty}
+%
+% \DoNotIndex{\ProvidesExplPackage, \RequirePackage, \NewDocumentCommand}
+%
+% \NewDocumentCommand \releasenote {}
+%   {This file describes release \fileversion, last revised \filedate.}
+% \title{The \pkg{\jobname} package\thanks\releasenote}
+%
+% \urldef{\urlxthinsp}{\url}{http://tex.stackexchange.com/a/59542/2966}
+% \urldef{\urlxflw}{\url}{http://tex.stackexchange.com/q/63568/2966}
+% \urldef{\urlxign}{\url}{http://tex.stackexchange.com/q/63971/2966}
+% \NewDocumentCommand \acknote {}
+%   {The original code is due to Enrico \enquote{egreg} Gregorio,
+%    based on an answer he gave to a question of mine on
+%    \href{http://tex.stackexchange.com}{\TeX.SX};
+%    see \urlxthinsp.
+%    Enrico, Joseph Wright, Bruno Le Floch, \& Clemens Niederberger
+%    helped iron out the implementation;
+%    Bruno also wrote the initial version of the documentation.
+%    See \urlxflw\ \& \urlxign.}
+% \author{Joel C. Salomon\\\email{joelcsalomon@gmail.com}\thanks\acknote}
+% \date{Released \filedate}
+%
+% \maketitle
+%
+% \begin{abstract}
+%   The \pkg{\jobname} package provides functions
+%   for defining \& managing commands which,
+%   like the familiar \cs{xspace},
+%   \enquote{peek} ahead at what follows them in the input stream.
+%   They compare this token against a stored list
+%   and choose an action depending on whether there was a match.
+% \end{abstract}
+%
+% \tableofcontents
+%
+% \begin{documentation}
+%
+% \section{Usage}
+%
+% This package provides functions for defining \cs{xspace}-like commands.
+% (Or will, when I actually write it.)
+%
+% \end{documentation}
+%
+% \begin{implementation}
+%
+% \section{\pkg{\jobname} Implementation}
+%
+%    \begin{macrocode}
+%<*package>
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+%<@@=xpeek>
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\RequirePackage{expl3, xparse}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\ProvidesExplPackage
+  {xpeek} {2012/08/06} {0.0}
+  {Define commands that peek ahead in the input stream}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+%</package>
+%    \end{macrocode}
+%
+% \end{implementation}
+%
+% \PrintChanges
+%
+% \PrintIndex
