@@ -61,18 +61,18 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 \RequirePackage[utf8]{inputenc}
 \documentclass[full]{l3doc}
 \usepackage{xpeek}
+
+^^A Set up formatting options
+\DeclareUrlCommand\url
+  {\def\UrlLeft##1\UrlRight{\text{‹}\href{##1}{##1}\text{›}}}
+\DeclareUrlCommand\email
+  {\def\UrlLeft##1\UrlRight{\text{‹}\href{mailto:##1}{##1}\text{›}}}
+\urlstyle{same}
 \begin{document}
   \DocInput{\jobname.dtx}
 \end{document}
 %</driver>
 % \fi
-%
-% ^^A Set up formatting options
-% \DeclareUrlCommand\url
-%   {\def\UrlLeft##1\UrlRight{\text{‹}\href{##1}{##1}\text{›}}}
-% \DeclareUrlCommand\email
-%   {\def\UrlLeft##1\UrlRight{\text{‹}\href{mailto:##1}{##1}\text{›}}}
-% \urlstyle{same}
 %
 % \changes{Version 0.0}{2012/07/17}{Initial version}
 %
