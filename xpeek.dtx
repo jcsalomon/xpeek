@@ -68,6 +68,9 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 \DeclareUrlCommand\email
   {\def\UrlLeft##1\UrlRight{\text{‹}\href{mailto:##1}{##1}\text{›}}}
 \urlstyle{same}
+\AtBeginDocument{
+  \sfcode\csname\encodingdefault\string\textquotedblright\endcsname=0
+}
 \begin{document}
   \DocInput{\jobname.dtx}
 \end{document}
