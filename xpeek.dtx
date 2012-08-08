@@ -143,9 +143,10 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 %     |\textit{half}hearted| & \textit{half}hearted & (correct)\\
 %     |{\itshape half}hearted| & {\itshape half}hearted & (overlap)\\
 %     |{\itshape half\/}hearted| & {\itshape half\/}hearted & (correct)\\
-%     ^^A There’s an l3doc bug causing the next line not to work right;
-%     ^^A see latex3/svn-mirror#96 for details.
-%     |by \textit{half}.| & by \textit{half}. & (correct)\\
+%     ^^A There’s a bug in the package `trace` which breaks suppression
+%     ^^A of italic correction; see latex3/svn-mirror#96 for details.
+%     ^^A As a temporary work-around, include `\nocorr` where needed.
+%     |by \textit{half}.| & by \textit{half\nocorr}. & (correct)\\
 %     |by {\itshape half}.| & by {\itshape half}. & (correct)\\
 %     |by {\itshape half\/}.| & by {\itshape half\/}. & (too wide)\\
 %   \end{tabular}
@@ -164,7 +165,7 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 % \end{quote}
 % This yields
 % \begin{quote}
-%   \NewDocumentCommand \naif {} {\textit{na\"\i f}}
+%   \NewDocumentCommand \naif {} {\textit{na\"\i f\nocorr}}
 %   He was a true \naif.
 % \end{quote}
 % So far, so good.
