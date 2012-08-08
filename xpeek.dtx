@@ -324,6 +324,43 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 %   (Note that this does not require \cs{xspace} to be defined.)
 % \end{variable}
 %
+% \subsection{Searching Token-Lists}
+%
+% \begin{macro}[aux]{\@@_if_in:NNTF, \l_@@_bool}
+%   Usage:
+%   \cs{@@_if_in:NNTF} \cs{\meta{haystack}} \cs{\meta{needle}}
+%     \marg{true-code} \marg{false-code}
+%   Among the variants of \cs{tl_if_in:Nn(TF)} defined in \pkg{expl3},
+%   the form \cs{tl_if_in:NNTF} is missing.
+%   But that’s the functionality I need,
+%   so let’s define it.
+%   \begin{arguments}
+%     \item Token-list to search through (the “haystack”)
+%     \item Token to search for (the “needle”)
+%   \end{arguments}
+%   Define an internal flag.
+%    \begin{macrocode}
+\bool_new:N \l_@@_bool
+%    \end{macrocode}
+%    Map the “haystack”, searching for the “needle”.
+%    \begin{macrocode}
+\prg_new_protected_conditional:Npnn \@@_if_in:NN #1#2 { TF }
+  {
+    \bool_set_false:N \l_@@_bool
+    \tl_map_inline:Nn #1
+      {
+        \token_if_eq_charcode:NNT #2 ##1
+          {
+            \bool_set_true:N \l_@@_bool
+            \tl_map_break:
+          }
+      }
+    \bool_if:NTF \l_@@_bool
+      { \prg_return_true: } { \prg_return_false: }
+  }
+%    \end{macrocode}
+% \end{macro}
+%
 %    \begin{macrocode}
 %</package>
 %    \end{macrocode}
