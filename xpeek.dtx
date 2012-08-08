@@ -65,14 +65,20 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 \usepackage[all]{foreign}
 
 ^^A Set up formatting options
+
+^^A Format URLs surrounded by guillemets
 \DeclareUrlCommand\url
   {\def\UrlLeft##1\UrlRight{\text{‹}\href{##1}{##1}\text{›}}}
 \DeclareUrlCommand\email
   {\def\UrlLeft##1\UrlRight{\text{‹}\href{mailto:##1}{##1}\text{›}}}
 \urlstyle{same}
+
+^^A Make Unicode curly quotes (“”) behave correctly
 \AtBeginDocument{
   \sfcode\csname\encodingdefault\string\textquotedblright\endcsname=0
 }
+\xspaceaddexceptions{”}
+
 \begin{document}
   \DocInput{\jobname.dtx}
 \end{document}
@@ -93,7 +99,7 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 % \urldef{\urlxflw}{\url}{http://tex.stackexchange.com/q/63568/2966}
 % \urldef{\urlxign}{\url}{http://tex.stackexchange.com/q/63971/2966}
 % \NewDocumentCommand \acknote {}
-%   {The original code is due to Enrico \enquote{egreg} Gregorio,
+%   {The original code is due to Enrico “egreg” Gregorio,
 %    based on an answer he gave to a question of mine on
 %    \href{http://tex.stackexchange.com}{\TeX.SX};
 %    see \urlxthinsp.
@@ -110,7 +116,7 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 %   The \pkg{\jobname} package provides functions
 %   for defining \& managing commands which,
 %   like the familiar \cs{xspace},
-%   \enquote{peek} ahead at what follows them in the input stream.
+%   “peek” ahead at what follows them in the input stream.
 %   They compare this token against a stored list
 %   and choose an action depending on whether there was a match.
 % \end{abstract}
@@ -122,7 +128,7 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 % \section{Introduction}
 %
 % This package provides functions for defining \cs{xspace}-like commands.
-% Such commands \enquote{peek} ahead into the input stream
+% Such commands “peek” ahead into the input stream
 % to see what follows their invocations;
 % their behavior varies depending on what it is that comes next.
 %
