@@ -61,6 +61,8 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 \RequirePackage[utf8]{inputenc}
 \documentclass[full]{l3doc}
 \usepackage{xpeek}
+\usepackage{xspace}
+\usepackage[all]{foreign}
 
 ^^A Set up formatting options
 \DeclareUrlCommand\url
@@ -120,7 +122,123 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 % \section{Introduction}
 %
 % This package provides functions for defining \cs{xspace}-like commands.
-% (Or will, when I actually write it.)
+% Such commands \enquote{peek} ahead into the input stream
+% to see what follows their invocations;
+% their behavior varies depending on what it is that comes next.
+%
+% Probably the most common \LaTeX\ command of this sort is \cs{textit}.
+% It looks ahead at the token following its argument
+% and decides whether to insert italic correction afterward.
+% Table~\ref{tab:itcor} compares the use of \cs{textit}
+% against using the font-switch command \cs{itshape}
+% with \& without explicit italic correction.
+% \begin{table}\centering
+%   \begin{tabular}{lll}
+%     |\textit{half}hearted| & \textit{half}hearted & (correct)\\
+%     |{\itshape half}hearted| & {\itshape half}hearted & (overlap)\\
+%     |{\itshape half\/}hearted| & {\itshape half\/}hearted & (correct)\\
+%     ^^A There’s an l3doc bug causing the next line not to work right;
+%     ^^A see latex3/svn-mirror#96 for details.
+%     |by \textit{half}.| & by \textit{half}. & (correct)\\
+%     |by {\itshape half}.| & by {\itshape half}. & (correct)\\
+%     |by {\itshape half\/}.| & by {\itshape half\/}. & (too wide)\\
+%   \end{tabular}
+%   \caption{Automatic italic correction with \cs{textit}}
+%   \label{tab:itcor}
+% \end{table}
+% Notice how \cs{textit} seems to just “do the right thing”
+% when it comes to inserting or omitting italic correction.
+%
+% It is, unfortunately, not hard to confuse \cs{textit}.
+% As an example, consider the following code:
+% \begin{quote}
+%   |\NewDocumentCommand \naif {} {\textit{na\"\i f}}|\\
+%   …\\
+%   |He was a true \naif.|
+% \end{quote}
+% This yields
+% \begin{quote}
+%   \NewDocumentCommand \naif {} {\textit{na\"\i f}}
+%   He was a true \naif.
+% \end{quote}
+% So far, so good.
+%
+% But using this macro in middle of a sentence
+% may produce results the naïve user does not expect.
+% For example, try
+% \begin{quote}
+%   |He was such a \naif he expected this example to work.|
+% \end{quote}
+% yielding
+% \begin{quote}
+%   \NewDocumentCommand \naif {} {\textit{na\"\i f}}
+%   He was such a \naif he expected this example to work.
+% \end{quote}
+% Oops.
+% We forgot that command words eat the spaces that follow them.
+%
+% This is usually the point where \TeX perts explain
+% about following command words with explicit spaces,
+% \eg, writing “|such a \naif\ he |…”,
+% or following such commands with an empty group,
+% “|such a \naif{} he |…”, \eg.
+%
+% Others, more pragmatically-inclined,
+% will mention the \pkg{xspace} package.
+% This is the sort of use-case it was developed for, after all,
+% so let’s try it:
+% \begin{quote}
+%   |\NewDocumentCommand \naif {} {\textit{na\"\i f}\xspace}|\\
+%   …\\
+%   |He was such a \naif he expected this example to work.|
+% \end{quote}
+% This produces
+% \begin{quote}
+%   \NewDocumentCommand \naif {} {\textit{na\"\i f}\xspace}
+%   He was such a \naif he expected this example to work.
+% \end{quote}
+% Even such a \foreign{naïf} can get the right result sometimes.
+%
+% But you see, there’s a kinda hitch.^^A
+% \footnote{Cue Malcolm Reynolds: “Don’t complicate things.”}
+% Recall the first time we used the macro:
+% \begin{quote}
+%   |He was a true \naif.|
+% \end{quote}
+% Now it yields this:
+% \begin{quote}
+%   \NewDocumentCommand \naif {} {\textit{na\"\i f}\xspace}
+%   He was a true \naif.
+% \end{quote}
+% Notice that ugly space between the \textit{f} and the period?
+% That’s italic correction being added where it doesn’t belong.
+%
+% The trouble lies in how \LaTeX\ implements the \cs{textit} logic.
+% The macro is clever enough to look ahead,
+% seeking for short punctuation (\eg, the comma \& period)
+% which should not be preceded by italic correction.
+% What the macro finds first, though,
+% is that invocation of \cs{xspace} we added.
+% That’s not one of the “no italic correction” tokens,
+% so the correction gets added and the sentence looks ugly.
+%
+% That’s where this package comes in.
+%
+% (As a side note, Phillip G. Ratcliffe’s \pkg{foreign} package,
+%  bundled with both MiK\TeX\ and \TeX~Live
+%  and available from CTAN at \url{http://ctan.org/pkg/foreign},
+%  is an excellent tool for this sort of foreign-word macro
+%  and was one of the inspirations for this package.)
+%
+% Commands generated via the tools the \pkg{xpeek} package provides
+% can peek ahead in the input stream,
+% like \cs{textit} and \cs{xspace},
+% checking whether the next token is on their match-list.
+% What \pkg{xpeek} adds is
+% the ability to ignore certain tokens during that peek-ahead.
+% These ignored tokens are not lost;
+% the scan-ahead routine saves them
+% and they are restored when the command executes.
 %
 % \end{documentation}
 %
