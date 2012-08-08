@@ -253,6 +253,36 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 % only one set of follower-dependent functions is defined.
 % Later versions will provide tools for defining such function sets.
 %
+% \subsection{Match- \& Ignore-Lists}
+%
+% \begin{variable}{\g_xpeek_matchlist_tl, \g_xpeek_ignorelist_tl}
+%   \begin{syntax}
+%     \cs{tl_gput_right:Nn} \cs{g_xpeek_\meta{list}_tl} \marg{tokens}
+%     \cs{tl_gremove_all:Nn} \cs{g_xpeek_\meta{list}_tl} \marg{tokens}
+%   \end{syntax}
+%   These two token-lists are the heart of \pkg{xpeek}.
+%
+%   The \textit{match-list} is similar to \pkg{xspace}’s exceptions list
+%   or \LaTeX’s \cs{nocorrlist} list for suppressing italic correction.
+%
+%   The functionality enabled by the \emph{ignore-list},
+%   on the other hand,
+%   is the \foreign{raison d’être} of this package.
+%   For example,
+%   if \LaTeX’s \cs{textit} had an ignore-list
+%   and the token \cs{xspace} were in that list,
+%   then the definition
+%   \begin{quote}
+%     |\NewDocumentCommand \naif {} {\textit{na\"\i f}\xspace}|
+%   \end{quote}
+%   from the example above
+%   would have worked properly:
+%   \cs{textit} would have looked \textit{past} the \cs{xspace},
+%   seen the period, and therefore omitted italic correction.
+%   When that was done, \cs{xspace} would execute,
+%   also see the period, and therefore not insert a space.
+% \end{variable}
+%
 % \end{documentation}
 %
 % \begin{implementation}
@@ -276,6 +306,23 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
   {xpeek} {2012/08/06} {0.0}
   {Define commands that peek ahead in the input stream}
 %    \end{macrocode}
+%
+% \subsection{Match- \& Ignore-Lists}
+%
+% \begin{variable}{\g_xpeek_matchlist_tl, \g_xpeek_ignorelist_tl}
+%   Define the lists.
+%    \begin{macrocode}
+\tl_new:N \g_xpeek_matchlist_tl
+\tl_new:N \g_xpeek_ignorelist_tl
+%    \end{macrocode}
+%   Initialize the match- \& ignore-lists for
+%   a simplistic re-implementation of \cs{textit}.
+%    \begin{macrocode}
+\tl_gset:Nn \g_xpeek_matchlist_tl  { , . }
+\tl_gset:Nn \g_xpeek_ignorelist_tl { \xspace }
+%    \end{macrocode}
+%   (Note that this does not require \cs{xspace} to be defined.)
+% \end{variable}
 %
 %    \begin{macrocode}
 %</package>
