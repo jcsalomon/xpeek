@@ -328,14 +328,14 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 %
 % \subsection{Searching Token-Lists}
 %
+% Among the variants of \cs{tl_if_in:Nn(TF)} defined in \pkg{expl3},
+% the form \cs{tl_if_in:NNTF} is missing.
+% But that’s the functionality I need,
+% so let’s define it.
 % \begin{macro}[aux]{\@@_if_in:NNTF, \l_@@_bool}
 %   Usage:
 %   \cs{@@_if_in:NNTF} \cs{\meta{haystack}} \cs{\meta{needle}}
 %     \marg{true-code} \marg{false-code}
-%   Among the variants of \cs{tl_if_in:Nn(TF)} defined in \pkg{expl3},
-%   the form \cs{tl_if_in:NNTF} is missing.
-%   But that’s the functionality I need,
-%   so let’s define it.
 %   \begin{arguments}
 %     \item Token-list to search through (the “haystack”)
 %     \item Token to search for (the “needle”)
