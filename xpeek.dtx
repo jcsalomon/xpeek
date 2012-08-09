@@ -277,10 +277,12 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 %   \end{quote}
 %   from the example above
 %   would have worked properly:
-%   \cs{textit} would have looked \textit{past} the \cs{xspace},
-%   seen the period, and therefore omitted italic correction.
-%   When that was done, \cs{xspace} would execute,
-%   also see the period, and therefore not insert a space.
+%   \cs{textit} would have ignored the \cs{xspace},
+%   looked past it \& seen the period,
+%   and therefore omitted italic correction.
+%   When that was done, \cs{xspace} would execute;
+%   it too would see the period,
+%   and therefore would not insert a space.
 % \end{variable}
 %
 % \end{documentation}
