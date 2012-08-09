@@ -285,6 +285,18 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 %   and therefore would not insert a space.
 % \end{variable}
 %
+% \subsection{Peek-ahead}
+%
+% \begin{function}{\xpeek_after:nw}
+%   \begin{syntax}
+%     \cs{xpeek_after:nw} \marg{code} \meta{token}
+%   \end{syntax}
+%   Similar to \pkg{expl3}’s \cs{peek_after:Nw},
+%   this sets the test variable \cs{l_peek_token} to \meta{token}
+%   then executes the \marg{code}.
+%   The \meta{token} remains in the input stream.
+% \end{function}
+%
 % \end{documentation}
 %
 % \begin{implementation}
@@ -325,6 +337,26 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 %    \end{macrocode}
 %   (Note that this does not require \cs{xspace} to be defined.)
 % \end{variable}
+%
+% \subsection{Peek-ahead}
+%
+% \begin{macro}[internal]{\xpeek_after:nw}
+% \begin{variable}[aux]{\l_@@_code_tl}
+%   Define a function (AKA “token-list”) to hold the code passed in.
+%    \begin{macrocode}
+\tl_new:N \l_@@_code_tl
+%    \end{macrocode}
+%   Store the argument in \cs{l_@@_code_tl},
+%   then defer to \cs{peek_after:Nw}
+%    \begin{macrocode}
+\cs_new_protected:Npn \xpeek_after:nw #1
+  {
+    \tl_set:Nn \l_@@_code_tl {#1}
+    \peek_after:Nw \l_@@_code_tl
+  }
+%    \end{macrocode}
+% \end{variable}
+% \end{macro}
 %
 % \subsection{Searching Token-Lists}
 %
