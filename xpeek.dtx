@@ -79,6 +79,10 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 }
 \xspaceaddexceptions{”}
 
+^^A Enable line continuations in `syntax` environments
+\NewDocumentCommand \fixsyntaxlines {}
+  {\def\^^M{\unskip\space\ignorespaces}}
+
 \begin{document}
   \DocInput{\jobname.dtx}
 \end{document}
@@ -297,6 +301,31 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 %   The \meta{token} remains in the input stream.
 % \end{function}
 %
+% \subsection{Collecting Ignored Tokens}
+%
+% \begin{function}{\xpeek_collect_do:nn}
+%   \begin{syntax}\fixsyntaxlines
+%     \cs{xpeek_collect_do:nn} \marg{ignore-list} \marg{operation} \
+%       \meta{the rest of the input-stream}
+%   \end{syntax}
+%   This collects all leading tokens in the input stream
+%   which are in the ignore-list,
+%   and passes them as an argument to the operation.
+%   For example, the invocation
+%   \begin{quote}
+%     |\xpeek_collect_do:nn { abc } { \foo \bar } caada|
+%   \end{quote}
+%   will collect the leading “\texttt{caa}” from the input stream
+%   and pass those tokens as an argument to
+%   the operation “|\foo \bar|”.
+%   \Ie, the code above is equivalent to this:
+%   \begin{quote}
+%     |\foo \bar { caa } da|
+%   \end{quote}
+%   (Note that it’s \cs{bar} \emph{within} the \marg{operation}
+%    that gets the collected tokens as an argument.)
+% \end{function}
+%
 % \end{documentation}
 %
 % \begin{implementation}
@@ -356,6 +385,57 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
   }
 %    \end{macrocode}
 % \end{variable}
+% \end{macro}
+%
+% \subsection{Collecting Ignored Tokens}
+%
+% \begin{macro}{\xpeek_collect_do:nn}
+% \begin{macro}[aux]{\@@_collect_do:nnn}
+% \begin{variable}[aux]{\l_@@_collected_tokens_tl}
+%   \begin{arguments}
+%     \item Tokens to collect from the input stream
+%     \item The operation to be performed on the collected tokens
+%     \item The next token on the input stream
+%           (for \cs{@@_collect_do:nnn}).
+%   \end{arguments}\noindent
+%   Define a list to save collected tokens in.
+%    \begin{macrocode}
+\tl_new:N \l_@@_collected_tokens_tl
+%    \end{macrocode}
+%   Clear list and defer to auxiliary function.
+%    \begin{macrocode}
+\cs_new_protected:Npn \xpeek_collect_do:nn #1#2
+  {
+    \tl_clean:N \l_@@_collected_tokens_tl
+    \@@_collect_do:nnn {#1} {#2} {}
+  }
+%    \end{macrocode}
+%   Recursively consume tokens from the input stream
+%   so long as they match the collect-list,
+%   then apply the operation to the collected tokens.
+%   The last matching token will not yet have been collected,
+%   so pass it to the operation as well.
+%   (If there were no matching tokens,
+%    |#3| will be the empty argument
+%    that was passed by \cs{xpeek_collect_do:nn}.)
+%    \begin{macrocode}
+\cs_new_protected:Npn \@@_collect_do:nnn #1#2#3
+  {
+    \xpeek_after:nw
+      {
+        \@@_if_in:NNTF #1 \l_peek_token
+          {
+            \tl_put_right:Nn \l_@@_collected_tokens_tl {#3}
+            \@@_collect_do:nnn {#1} {#2}
+          }
+          {
+            #2 { \l_@@_collected_tokens_tl #3 }
+          }
+      }
+  }
+%    \end{macrocode}
+% \end{variable}
+% \end{macro}
 % \end{macro}
 %
 % \subsection{Searching Token-Lists}
