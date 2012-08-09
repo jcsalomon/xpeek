@@ -9,7 +9,8 @@ The code is adapted from an answer posted to [TeX.SX][2] by
 Enrico “egreg” Gregorio at <http://tex.stackexchange.com/a/59542/2966>,
 with modifications according to suggestions & contributions by
 Enrico, Joseph Wright, Bruno Le Floch, & Clemens Niederberger;
-see <http://tex.stackexchange.com/q/63568/2966>.
+see <http://tex.stackexchange.com/q/63568/2966>
+and <http://thread.gmane.org/gmane.comp.tex.latex.latex3/2894>.
 
 License
 -------
