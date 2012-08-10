@@ -427,7 +427,7 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 %    \begin{macrocode}
 \cs_new_protected:Npn \xpeek_collect_do:nn #1#2
   {
-    \tl_clean:N \l_@@_collected_tokens_tl
+    \tl_clear:N \l_@@_collected_tokens_tl
     \@@_collect_do:nnn {#1} {#2} {}
   }
 %    \end{macrocode}
