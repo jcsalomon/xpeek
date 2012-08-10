@@ -89,11 +89,23 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 %</driver>
 % \fi
 %
-% \changes{Version 0.0}{2012/07/17}{Initial version}
+% \changes{Version 0.1}{2012/08/09}{First useful version}
 %
 % \GetFileInfo{\jobname.sty}
 %
-% \DoNotIndex{\ProvidesExplPackage, \RequirePackage, \NewDocumentCommand}
+% \DoNotIndex
+%   {
+%     \ProvidesExplPackage, \RequirePackage, \NewDocumentCommand,
+%     \bool_new:N, \bool_set_true:N, \bool_set_false:N, \bool_if:NTF,
+%     \cs_new_protected:Npn,
+%     \peek_after:Nw,
+%     \prg_new_protected_conditional:Npnn,
+%     \prg_return_true:, \prg_return_false:,
+%     \tl_new:N, \tl_clear:N, \tl_set:Nn,
+%     \tl_put_right:Nn,
+%     \tl_map_inline:Nn, \tl_map_break:,
+%     \token_if_eq_charcode:NNT,
+%   }
 %
 % \NewDocumentCommand \releasenote {}
 %   {This file describes release \fileversion, last revised \filedate.}
@@ -442,7 +454,7 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 %
 %    \begin{macrocode}
 \ProvidesExplPackage
-  {xpeek} {2012/08/06} {0.0}
+  {xpeek} {2012/08/09} {0.1}
   {Define commands that peek ahead in the input stream}
 %    \end{macrocode}
 %
