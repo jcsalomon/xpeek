@@ -329,6 +329,24 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 %    that gets the collected tokens as an argument.)
 % \end{function}
 %
+% \subsection{Searching Token-Lists}
+%
+% \begin{function}{\xpeek_if_in:NNTF}
+%   \begin{syntax}\fixsyntaxlines
+%     \cs{xpeek_if_in:NNTF} \cs{\meta{haystack}} \cs{\meta{needle}} \
+%       \marg{true-code} \marg{false-code}
+%   \end{syntax}
+%   Among the variants of \cs{tl_if_in:Nn(TF)} defined in \pkg{expl3},
+%   the form \cs{tl_if_in:NNTF} is missing.
+%   But that’s the form needed in this package,
+%   in constructions like this:
+%   \begin{quote}
+%     |\xpeek_if_in:NNTF \g_xpeek_matchlist_tl \l_peek_token|\\
+%     |  |\marg{true-code} \marg{false-code}
+%   \end{quote}
+%   So we define it ourselves.
+% \end{function}
+%
 % \end{documentation}
 %
 % \begin{implementation}
@@ -426,7 +444,7 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
   {
     \xpeek_after:nw
       {
-        \@@_if_in:NNTF #1 \l_peek_token
+        \xpeek_if_in:NNTF #1 \l_peek_token
           {
             \tl_put_right:Nn \l_@@_collected_tokens_tl {#3}
             \@@_collect_do:nnn {#1} {#2}
@@ -443,25 +461,19 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 %
 % \subsection{Searching Token-Lists}
 %
-% Among the variants of \cs{tl_if_in:Nn(TF)} defined in \pkg{expl3},
-% the form \cs{tl_if_in:NNTF} is missing.
-% But that’s the functionality I need,
-% so let’s define it.
-% \begin{macro}[aux]{\@@_if_in:NNTF, \l_@@_bool}
-%   Usage:
-%   \cs{@@_if_in:NNTF} \cs{\meta{haystack}} \cs{\meta{needle}}
-%     \marg{true-code} \marg{false-code}
+% \begin{macro}{\xpeek_if_in:NNTF}
+% \begin{variable}[aux]{\l_@@_bool}
 %   \begin{arguments}
 %     \item Token-list to search through (the “haystack”)
 %     \item Token to search for (the “needle”)
-%   \end{arguments}
+%   \end{arguments}\noindent
 %   Define an internal flag.
 %    \begin{macrocode}
 \bool_new:N \l_@@_bool
 %    \end{macrocode}
 %    Map the “haystack”, searching for the “needle”.
 %    \begin{macrocode}
-\prg_new_protected_conditional:Npnn \@@_if_in:NN #1#2 { TF }
+\prg_new_protected_conditional:Npnn \xpeek_if_in:NN #1#2 { TF }
   {
     \bool_set_false:N \l_@@_bool
     \tl_map_inline:Nn #1
@@ -476,6 +488,7 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
       { \prg_return_true: } { \prg_return_false: }
   }
 %    \end{macrocode}
+% \end{variable}
 % \end{macro}
 %
 %    \begin{macrocode}
