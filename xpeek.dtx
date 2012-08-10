@@ -347,6 +347,81 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 %   So we define it ourselves.
 % \end{function}
 %
+% \section{Example}
+%
+% As a demonstration,
+% here’s an example of using the \pkg{xpeek} facilities
+% to implement correct automatic italic correction \ala \cs{textit}.
+%
+% Set the match-list equal to \LaTeX’s default \cs{nocorrlist}.
+% Only \cs{xspace} is needed in the ignore-list:
+% \begin{quote}
+%   |\tl_gset:Nn \g_xpeek_matchlist_tl  { , . }|\\
+%   |\tl_gset:Nn \g_xpeek_ignorelist_tl { \xspace }|
+% \end{quote}
+% (Note that this does not require \cs{xspace} to be defined;
+%  it merely ensure that if it is defined,
+%  the macro will work correctly.)
+%
+% Declare the new italicization command \cs{xit}.
+% It calls \cs{xpeek_collect_do:nn} to collect
+% any instances of \cs{xspace} that might follow the invocation.
+% The \marg{code} argument to \cs{xpeek_collect_do:nn}
+% is where the italicization happens.
+% Before that ends, though,
+% the code checks whether \cs{l_peek_token} is in the ignore-list
+% and includes italic correction, or not, appropriately.
+% The last command within the \marg{code}
+% is what will get the collected tokens as an argument.
+% Since we want to keep \cs{xspace} if it’s there,
+% we finish up the code with \cs{use:n},
+% which simply puts its argument into the input stream.
+% \begin{quote}
+%   |\NewDocumentCommand \xit {m}|\\
+%   |  {|\\
+%   |    \xpeek_collect_do:nn \g_xpeek_ignorelist_tl|\\
+%   |      {|\\
+%   |        \group_begin:|\\
+%   |        \itshape #1|\\
+%   |        \xpeek_if_in:NNTF \g_xpeek_matchlist_tl \l_peek_token|\\
+%   |          { } { \/ }|\\
+%   |        \group_end:|\\
+%   |        \use:n|\\
+%   |      }|\\
+%   |  }|\\
+% \end{quote}
+%
+% Finally, define the command we tried to make work in the introduction,
+% and see whether we’ve made it work.
+% \begin{quote}
+%   |\NewDocumentCommand \naif {} {\xit{na\"\i f}\xspace}|\\
+%   |He was a true \naif.|\\
+%   |He was such a \naif he expected this example to work.|
+% \end{quote}
+% After all this, the code above yields this result:
+% \begin{quote}
+%   \ExplSyntaxOn
+%   \tl_gset:Nn \g_xpeek_matchlist_tl  { , . }
+%   \tl_gset:Nn \g_xpeek_ignorelist_tl { \xspace }
+%   \NewDocumentCommand \xit {m}
+%     {
+%       \xpeek_collect_do:nn \g_xpeek_ignorelist_tl
+%         {
+%           \group_begin:
+%           \itshape #1
+%           \xpeek_if_in:NNTF \g_xpeek_matchlist_tl \l_peek_token
+%             { } { \/ }
+%           \group_end:
+%           \use:n
+%         }
+%     }
+%   \ExplSyntaxOff
+%   \NewDocumentCommand \naif {} {\xit{na\"\i f}\xspace}
+%   He was a true \naif.
+%   He was such a \naif he expected this example to work.
+% \end{quote}
+% And work it does.
+%
 % \end{documentation}
 %
 % \begin{implementation}
@@ -379,13 +454,6 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 \tl_new:N \g_xpeek_matchlist_tl
 \tl_new:N \g_xpeek_ignorelist_tl
 %    \end{macrocode}
-%   Initialize the match- \& ignore-lists for
-%   a simplistic re-implementation of \cs{textit}.
-%    \begin{macrocode}
-\tl_gset:Nn \g_xpeek_matchlist_tl  { , . }
-\tl_gset:Nn \g_xpeek_ignorelist_tl { \xspace }
-%    \end{macrocode}
-%   (Note that this does not require \cs{xspace} to be defined.)
 % \end{variable}
 %
 % \subsection{Peek-ahead}
