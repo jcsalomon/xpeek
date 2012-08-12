@@ -188,7 +188,6 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 %   He was a true \naif.
 % \end{quote}
 % So far, so good.
-%
 % But using this macro in middle of a sentence
 % may produce results the naïve user does not expect.
 % For example, try
@@ -365,8 +364,8 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 % here’s an example of using the \pkg{xpeek} facilities
 % to implement correct automatic italic correction \ala \cs{textit}.
 %
-% Set the match-list equal to \LaTeX’s default \cs{nocorrlist}.
-% Only \cs{xspace} is needed in the ignore-list:
+% We set the match-list equal to \LaTeX’s default \cs{nocorrlist};
+% as mentioned above, \cs{xspace} needs to be in the ignore-list:
 % \begin{quote}
 %   |\tl_gset:Nn \g_xpeek_matchlist_tl  { , . }|\\
 %   |\tl_gset:Nn \g_xpeek_ignorelist_tl { \xspace }|
@@ -375,19 +374,25 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 %  it merely ensure that if it is defined,
 %  the macro will work correctly.)
 %
-% Declare the new italicization command \cs{xit}.
+% Next, we declare the new italicization command \cs{xit}.
 % It calls \cs{xpeek_collect_do:nn} to collect
 % any instances of \cs{xspace} that might follow the invocation.
-% The \marg{code} argument to \cs{xpeek_collect_do:nn}
-% is where the italicization happens.
-% Before that ends, though,
-% the code checks whether \cs{l_peek_token} is in the ignore-list
-% and includes italic correction, or not, appropriately.
-% The last command within the \marg{code}
+% These are saved, but ignored for the time being.
+%
+% It’s within the \marg{code} argument to \cs{xpeek_collect_do:nn},
+% between \cs{group_begin:} and \cs{group_end:},
+% that the italicization happens.
+% Before we return to the default font, though,
+% the code checks whether \cs{l_peek_token} is in the ignore-list;
+% it then decides whether to include italic correction.
+%
+% Recall next that the last command within the \marg{code}
 % is what will get the collected tokens as an argument.
 % Since we want to keep \cs{xspace} if it’s there,
 % we finish up the code with \cs{use:n},
 % which simply puts its argument into the input stream.
+%
+% Here’s the code:
 % \begin{quote}
 %   |\NewDocumentCommand \xit {m}|\\
 %   |  {|\\
@@ -404,13 +409,13 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 % \end{quote}
 %
 % Finally, define the command we tried to make work in the introduction,
-% and see whether we’ve made it work.
+% and see whether we’ve made it work:
 % \begin{quote}
 %   |\NewDocumentCommand \naif {} {\xit{na\"\i f}\xspace}|\\
 %   |He was a true \naif.|\\
 %   |He was such a \naif he expected this example to work.|
 % \end{quote}
-% After all this, the code above yields this result:
+% The code above yields this result:
 % \begin{quote}
 %   \ExplSyntaxOn
 %   \tl_gset:Nn \g_xpeek_matchlist_tl  { , . }
