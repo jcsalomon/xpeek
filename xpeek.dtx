@@ -79,6 +79,10 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 }
 \xspaceaddexceptions{”}
 
+^^A Define indented verbatim environment
+\DefineVerbatimEnvironment{IVerbatim}{Verbatim}%
+  {xleftmargin=2em, gobble=4}
+
 ^^A Enable line continuations in `syntax` environments
 \NewDocumentCommand \fixsyntaxlines {}
   {\def\^^M{\unskip\space\ignorespaces}}
@@ -189,11 +193,10 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 %
 % It is, unfortunately, not hard to confuse \cs{textit}.
 % As an example, consider the following code:
-% \begin{quote}
-%   |\NewDocumentCommand \naif {} {\textit{na\"\i f}}|\\
-%   …\\
-%   |He was a true \naif.|
-% \end{quote}
+% \begin{IVerbatim}
+%   \NewDocumentCommand \naif {} {\textit{na\"\i f}}
+%   He was a true \naif.
+% \end{IVerbatim}
 % This yields
 % \begin{quote}
 %   \NewDocumentCommand \naif {} {\textit{na\"\i f\nocorr}}
@@ -203,9 +206,9 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 % But using this macro in middle of a sentence
 % may produce results the naïve user does not expect.
 % For example, try
-% \begin{quote}
-%   |He was such a \naif he expected this example to work.|
-% \end{quote}
+% \begin{IVerbatim}
+%   He was such a \naif he expected this example to work.
+% \end{IVerbatim}
 % yielding
 % \begin{quote}
 %   \NewDocumentCommand \naif {} {\textit{na\"\i f}}
@@ -224,11 +227,10 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 % will mention the \pkg{xspace} package.
 % This is the sort of use-case it was developed for, after all,
 % so let’s try it:
-% \begin{quote}
-%   |\NewDocumentCommand \naif {} {\textit{na\"\i f}\xspace}|\\
-%   …\\
-%   |He was such a \naif he expected this example to work.|
-% \end{quote}
+% \begin{IVerbatim}
+%   \NewDocumentCommand \naif {} {\textit{na\"\i f}\xspace}
+%   He was such a \naif he expected this example to work.
+% \end{IVerbatim}
 % This produces
 % \begin{quote}
 %   \NewDocumentCommand \naif {} {\textit{na\"\i f}\xspace}
@@ -239,9 +241,9 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 % But you see, there’s a kinda hitch.^^A
 % \footnote{Cue Malcolm Reynolds: “Don’t complicate things.”}
 % Recall the first time we used the macro:
-% \begin{quote}
-%   |He was a true \naif.|
-% \end{quote}
+% \begin{IVerbatim}
+%   He was a true \naif.
+% \end{IVerbatim}
 % Now it yields this:
 % \begin{quote}
 %   \NewDocumentCommand \naif {} {\textit{na\"\i f}\xspace}
@@ -302,9 +304,9 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 %   if \LaTeX’s \cs{textit} had an ignore-list
 %   and the token \cs{xspace} were in that list,
 %   then the definition
-%   \begin{quote}
-%     |\NewDocumentCommand \naif {} {\textit{na\"\i f}\xspace}|
-%   \end{quote}
+%   \begin{IVerbatim}[gobble=6]
+%     \NewDocumentCommand \naif {} {\textit{na\"\i f}\xspace}
+%   \end{IVerbatim}
 %   from the example above
 %   would have worked properly:
 %   \cs{textit} would have ignored the \cs{xspace},
@@ -338,16 +340,16 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 %   which are in the ignore-list,
 %   and passes them as an argument to the operation.
 %   For example, the invocation
-%   \begin{quote}
-%     |\xpeek_collect_do:nn { abc } { \foo \bar } caada|
-%   \end{quote}
+%   \begin{IVerbatim}[gobble=6]
+%     \xpeek_collect_do:nn { abc } { \foo \bar } caada
+%   \end{IVerbatim}
 %   will collect the leading “\texttt{caa}” from the input stream
 %   and pass those tokens as an argument to
 %   the operation “|\foo \bar|”.
 %   \Ie, the code above is equivalent to this:
-%   \begin{quote}
-%     |\foo \bar { caa } da|
-%   \end{quote}
+%   \begin{IVerbatim}[gobble=6]
+%     \foo \bar { caa } da
+%   \end{IVerbatim}
 %   (Note that it’s \cs{bar} \emph{within} the \marg{operation}
 %    that gets the collected tokens as an argument.)
 % \end{function}
@@ -363,10 +365,10 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 %   the form \cs{tl_if_in:NNTF} is missing.
 %   But that’s the form needed in this package,
 %   in constructions like this:
-%   \begin{quote}
-%     |\xpeek_if_in:NNTF \g_xpeek_matchlist_tl \l_peek_token|\\
-%     |  |\marg{true-code} \marg{false-code}
-%   \end{quote}
+%   \begin{IVerbatim}[gobble=6, commandchars=+\[\]]
+%     \xpeek_if_in:NNTF \g_xpeek_matchlist_tl \l_peek_token
+%       +marg[true-code] +marg[false-code]
+%   \end{IVerbatim}
 %   So we define it ourselves.
 % \end{function}
 %
@@ -378,10 +380,10 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 %
 % We set the match-list equal to \LaTeX’s default \cs{nocorrlist};
 % as mentioned above, \cs{xspace} needs to be in the ignore-list:
-% \begin{quote}
-%   |\tl_gset:Nn \g_xpeek_matchlist_tl  { , . }|\\
-%   |\tl_gset:Nn \g_xpeek_ignorelist_tl { \xspace }|
-% \end{quote}
+% \begin{IVerbatim}
+%   \tl_gset:Nn \g_xpeek_matchlist_tl  { , . }
+%   \tl_gset:Nn \g_xpeek_ignorelist_tl { \xspace }
+% \end{IVerbatim}
 % (Note that this does not require \cs{xspace} to be defined;
 %  it merely ensure that if it is defined,
 %  the macro will work correctly.)
@@ -405,28 +407,28 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 % which simply puts its argument into the input stream.
 %
 % Here’s the code:
-% \begin{quote}
-%   |\NewDocumentCommand \xit {m}|\\
-%   |  {|\\
-%   |    \xpeek_collect_do:nn \g_xpeek_ignorelist_tl|\\
-%   |      {|\\
-%   |        \group_begin:|\\
-%   |        \itshape #1|\\
-%   |        \xpeek_if_in:NNTF \g_xpeek_matchlist_tl \l_peek_token|\\
-%   |          { } { \/ }|\\
-%   |        \group_end:|\\
-%   |        \use:n|\\
-%   |      }|\\
-%   |  }|\\
-% \end{quote}
+% \begin{IVerbatim}
+%   \NewDocumentCommand \xit {m}
+%     {
+%       \xpeek_collect_do:nn \g_xpeek_ignorelist_tl
+%         {
+%           \group_begin:
+%           \itshape #1
+%           \xpeek_if_in:NNTF \g_xpeek_matchlist_tl \l_peek_token
+%             { } { \/ }
+%           \group_end:
+%           \use:n
+%         }
+%     }
+% \end{IVerbatim}
 %
 % Finally, define the command we tried to make work in the introduction,
 % and see whether we’ve made it work:
-% \begin{quote}
-%   |\NewDocumentCommand \naif {} {\xit{na\"\i f}\xspace}|\\
-%   |He was a true \naif.|\\
-%   |He was such a \naif he expected this example to work.|
-% \end{quote}
+% \begin{IVerbatim}
+%   \NewDocumentCommand \naif {} {\xit{na\"\i f}\xspace}
+%   He was a true \naif.
+%   He was such a \naif he expected this example to work.
+% \end{IVerbatim}
 % The code above yields this result:
 % \begin{quote}
 %   \ExplSyntaxOn
