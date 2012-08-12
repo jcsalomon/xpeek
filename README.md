@@ -12,6 +12,38 @@ Enrico, Joseph Wright, Bruno Le Floch, & Clemens Niederberger;
 see <http://tex.stackexchange.com/q/63568/2966>
 and <http://thread.gmane.org/gmane.comp.tex.latex.latex3/2894>.
 
+Installation
+------------
+
+This package is distributed as a standalone `.dtx` file,
+packaged for the LaTeX3 project’s `l3docstrip`.
+To produce the style file, run this command:
+
+    pdflatex xpeek.dtx
+
+This will also produce a version of the PDF documentation,
+but with undefined references and without an index or change-log.
+To get a more useful version of the documentation,
+run these commands next:
+
+    pdflatex xpeek.dtx
+    makeindex -s l3doc.ist -o xpeek.ind xpeek.idx
+    makeindex -s gglo.ist -o xpeek.gls xpeek.glo
+    pdflatex xpeek.dtx
+    pdflatex xpeek.dtx
+
+These next commands are not strictly necessary,
+since Acrobat Reader can generate & display thumbnails on-the-fly.
+But since `l3doc` includes `hypdoc` which includes `thumbpdf`,
+I may as well generate the pre-rendered thumbnails:
+
+    thumbpdf xpeek.pdf
+    pdflatex xpeek.dtx
+
+Notice that the command for generating the index is different
+from the one usually used for `ltxdoc`-documented packages;
+that’s because I’m using the new (and experimental) package `l3doc`.
+
 License
 -------
 
