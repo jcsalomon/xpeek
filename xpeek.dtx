@@ -159,15 +159,27 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 % with \& without explicit italic correction.
 % \begin{table}\centering
 %   \begin{tabular}{lll}
-%     |\textit{half}hearted| & \textit{half}hearted & (correct)\\
-%     |{\itshape half}hearted| & {\itshape half}hearted & (overlap)\\
-%     |{\itshape half\/}hearted| & {\itshape half\/}hearted & (correct)\\
+%     |{\itshape half}hearted| &
+%      {\itshape half}hearted  &
+%         (overlap)\\
+%     |{\itshape half\/}hearted| &
+%      {\itshape half\/}hearted  &
+%         (correct)\\
+%     |\textit{half}hearted| &
+%       \textit{half}hearted &
+%         (correctly including italic correction)\\
 %     ^^A There’s a bug in the package `trace` which breaks suppression
 %     ^^A of italic correction; see latex3/svn-mirror#96 for details.
 %     ^^A As a temporary work-around, include `\nocorr` where needed.
-%     |by \textit{half}.| & by \textit{half\nocorr}. & (correct)\\
-%     |by {\itshape half}.| & by {\itshape half}. & (correct)\\
-%     |by {\itshape half\/}.| & by {\itshape half\/}. & (too wide)\\
+%     |by {\itshape half}.| &
+%      by {\itshape half}.  &
+%         (correct)\\
+%     |by {\itshape half\/}.| &
+%      by {\itshape half\/}.  &
+%         (too wide)\\
+%     |by \textit{half}.| &
+%      by \textit{half\nocorr}.  &
+%         (correctly omitting italic correction)\\
 %   \end{tabular}
 %   \caption{Automatic italic correction with \cs{textit}}
 %   \label{tab:itcor}
