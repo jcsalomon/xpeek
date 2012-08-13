@@ -81,7 +81,11 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 
 ^^A Define indented verbatim environment
 \DefineVerbatimEnvironment{IVerbatim}{Verbatim}%
-  {xleftmargin=2em, gobble=4}
+  {xleftmargin=2.5\rmemwidth, gobble=4}
+\newlength\rmemwidth
+\AtBeginDocument{
+  \setlength\rmemwidth{\fontdimen6\font}
+}
 
 ^^A Enable line continuations in `syntax` environments
 \NewDocumentCommand \fixsyntaxlines {}
