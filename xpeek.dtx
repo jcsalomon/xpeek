@@ -165,8 +165,9 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 % Table~\ref{tab:itcor} compares the use of \cs{textit}
 % against using the font-switch command \cs{itshape}
 % with \& without explicit italic correction.
-% \begin{table}\centering
-%   \begin{tabular}{lll}
+% \begin{table}[hbp]\centering
+%   \begin{tabular}{|lll|}
+%   \hline
 %     |{\itshape half}hearted| &
 %      {\itshape half}hearted  &
 %         (overlap)\\
@@ -188,6 +189,7 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 %     |by \textit{half}.| &
 %      by \textit{half\nocorr}.  &
 %         (correctly omitting italic correction)\\
+%   \hline
 %   \end{tabular}
 %   \caption{Automatic italic correction with \cs{textit}}
 %   \label{tab:itcor}
