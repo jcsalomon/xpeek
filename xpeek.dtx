@@ -293,8 +293,8 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 %
 % \begin{variable}{\g_xpeek_matchlist_tl, \g_xpeek_ignorelist_tl}
 %   \begin{syntax}
-%     \cs{tl_gput_right:Nn} \cs{g_xpeek_\meta{list}_tl} \marg{tokens}
-%     \cs{tl_gremove_all:Nn} \cs{g_xpeek_\meta{list}_tl} \marg{tokens}
+%     \cs{tl_gput_right:Nn} \cs{g_xpeek_\meta{list}_tl} \Arg{tokens}
+%     \cs{tl_gremove_all:Nn} \cs{g_xpeek_\meta{list}_tl} \Arg{tokens}
 %   \end{syntax}
 %   These two token-lists are the heart of \pkg{xpeek}.
 %
@@ -325,11 +325,11 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 %
 % \begin{function}{\xpeek_after:nw}
 %   \begin{syntax}
-%     \cs{xpeek_after:nw} \marg{code} \meta{token}
+%     \cs{xpeek_after:nw} \Arg{code} \meta{token}
 %   \end{syntax}
 %   Similar to \pkg{expl3}’s \cs{peek_after:Nw},
 %   this sets the test variable \cs{l_peek_token} to \meta{token}
-%   then executes the \marg{code}.
+%   then executes the \Arg{code}.
 %   The \meta{token} remains in the input stream.
 % \end{function}
 %
@@ -337,7 +337,7 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 %
 % \begin{function}{\xpeek_collect_do:nn}
 %   \begin{syntax}\fixsyntaxlines
-%     \cs{xpeek_collect_do:nn} \marg{ignore-list} \marg{operation} \
+%     \cs{xpeek_collect_do:nn} \Arg{ignore-list} \Arg{operation} \
 %       \meta{the rest of the input-stream}
 %   \end{syntax}
 %   This collects all leading tokens in the input stream
@@ -354,7 +354,7 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 %   \begin{IVerbatim}[gobble=6]
 %     \foo \bar { caa } da
 %   \end{IVerbatim}
-%   (Note that it’s \cs{bar} \emph{within} the \marg{operation}
+%   (Note that it’s \cs{bar} \emph{within} the \Arg{operation}
 %    that gets the collected tokens as an argument.)
 % \end{function}
 %
@@ -363,7 +363,7 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 % \begin{function}{\xpeek_if_in:NNTF}
 %   \begin{syntax}\fixsyntaxlines
 %     \cs{xpeek_if_in:NNTF} \cs{\meta{haystack}} \cs{\meta{needle}} \
-%       \marg{true-code} \marg{false-code}
+%       \Arg{true-code} \Arg{false-code}
 %   \end{syntax}
 %   Among the variants of \cs{tl_if_in:Nn(TF)} defined in \pkg{expl3},
 %   the form \cs{tl_if_in:NNTF} is missing.
@@ -397,14 +397,14 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 % any instances of \cs{xspace} that might follow the invocation.
 % These are saved, but ignored for the time being.
 %
-% It’s within the \marg{code} argument to \cs{xpeek_collect_do:nn},
+% It’s within the \Arg{code} argument to \cs{xpeek_collect_do:nn},
 % between \cs{group_begin:} and \cs{group_end:},
 % that the italicization happens.
 % Before we return to the default font, though,
 % the code checks whether \cs{l_peek_token} is in the ignore-list;
 % it then decides whether to include italic correction.
 %
-% Recall next that the last command within the \marg{code}
+% Recall next that the last command within the \Arg{code}
 % is what will get the collected tokens as an argument.
 % Since we want to keep \cs{xspace} if it’s there,
 % we finish up the code with \cs{use:n},
