@@ -30,6 +30,8 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 
 ----------------------------------------------------------------
 \endpreamble
+\declarepreamble\minimalpreamble
+\endpreamble
 \postamble
 \endpostamble
 \usedir{tex/latex/xpeek}
@@ -39,6 +41,7 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 %</install>
 %<install>\endbatchfile
 %<*internal>
+\usepreamble\minimalpreamble
 \usedir{source/latex/xpeek}
 \generate{
   \file{\jobname.ins}{\from{\jobname.dtx}{install}}
