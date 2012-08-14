@@ -58,7 +58,6 @@ LaTeX Project Public License (LPPL), either version 1.3c of this
 license or (at your option) any later version.  The latest version
 of this license is at <http://www.latex-project.org/lppl.txt>.
 
-
 This work is “maintained” (_per_ LPPL maintenance status) by
 Joel C. Salomon <joelcsalomon@gmail.com>.
 
