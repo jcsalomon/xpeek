@@ -11,9 +11,11 @@
 *.log
 *.out
 *.pdf
+*.synctex.gz
+*.tests
 *.toc
 *.tpt
-*.synctex.gz
 *.zip
-xpeek/
 xpeek.sty
+xpeek-test.tex
+xpeek/

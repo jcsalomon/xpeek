@@ -38,10 +38,18 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 \generate{
   \file{\jobname.sty}{\from{\jobname.dtx}{package}}
 }
+\nopreamble\nopostamble
+\generate{
+  \file{\jobname.tests}{\from{\jobname.dtx}{tests}}
+}
+\generate{
+  \file{\jobname-test.tex}{\from{\jobname.dtx}{testsuite,tests}}
+}
 %</install>
 %<install>\endbatchfile
 %<*internal>
 \usepreamble\minimalpreamble
+\usepostamble\defaultpostamble
 \usedir{source/latex/xpeek}
 \generate{
   \file{\jobname.ins}{\from{\jobname.dtx}{install}}
@@ -55,6 +63,7 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 \usepackage{xpeek}
 \usepackage{xspace}
 \usepackage[all]{foreign}
+\usepackage{qstest}
 
 ^^A Set up formatting options
 
@@ -591,6 +600,89 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 %    \begin{macrocode}
 %</package>
 %    \end{macrocode}
+%
+% \section{Test Suite}
+%
+% \changes{Version 0.2}{2012/08/15}{Added test-suite}
+%
+% ^^A Reset line numbers in code listings
+% \makeatletter
+% \c@CodelineNo 0
+% \makeatother
+%
+% The test suite below is run automatically
+% when this document is produced.
+% It can also be run separately by executing
+% \begin{IVerbatim}[commandchars=+\[\]]
+%   latex +jobname-test
+% \end{IVerbatim}
+% at the command prompt.
+%
+% \input{\jobname.tests}
+%
+%    \begin{macrocode}
+%<testsuite>\documentclass{article}
+%<testsuite>\usepackage{xparse, expl3, xpeek, qstest}
+%<testsuite>\begin{document}
+%<*tests>
+%    \end{macrocode}
+%
+% \subsection{Set-Up: Wrapping \cs{Expect}}
+%
+% \begin{macro}[internal]{\ExpectIdenticalWidths}
+% Since the commands \pkg{xpeek} helps produce are not expandable,
+% directly comparing their outputs is not feasible.
+% Instead, typeset two versions into boxes
+% and have \pkg{qstest} compare these boxes’ widths.
+% (Thanks to Heiko Oberdiek for this technique;
+%  see \url{http://tex.stackexchange.com/q/67192/2966}.)
+%    \begin{macrocode}
+\ExplSyntaxOn
+\NewDocumentCommand \ExpectIdenticalWidths { m m }
+  {
+    \hbox_set:Nn \l_tmpa_box {#1}
+    \hbox_set:Nn \l_tmpb_box {#2}
+    \Expect
+      * {\dim_use:N \box_wd:N \l_tmpa_box}
+      * {\dim_use:N \box_wd:N \l_tmpb_box}
+  }
+\ExplSyntaxOff
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{Emulating \cs{xspace}}
+%
+% Define a simple analogue to \cs{xspace}.
+%    \begin{macrocode}
+\ExplSyntaxOn
+\tl_const:Nn \c_xsp_exceptions_tl { ,;:.!? }
+\NewDocumentCommand \xsp {}
+  {
+    \xpeek_collect_do:nn \c_empty_tl
+      {
+        \xpeek_if_in:NNTF \c_xsp_exceptions_tl \l_peek_token
+          { } { ~ }
+      }
+  }
+\ExplSyntaxOff
+%    \end{macrocode}
+% Test \cs{xsp}, ensuring that it is space-factor–agnostic.
+%    \begin{macrocode}
+\begin{qstest}{Emulating \xspace}{xpeek}
+  \ExpectIdenticalWidths{foo bar}{foo\xsp bar}
+  \ExpectIdenticalWidths{foo. bar}{foo\xsp. bar}
+  \ExpectIdenticalWidths{FOO. bar}{FOO\xsp. bar}
+  \ExpectIdenticalWidths{foo. bar}{foo.\xsp bar}
+  \ExpectIdenticalWidths{FOO. bar}{FOO.\xsp bar}
+\end{qstest}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+%</tests>
+%<testsuite>\end{document}
+%    \end{macrocode}
+% N.B\@. The stand-alone test-suite will not produce any output,
+% only a log file.
 %
 % \end{implementation}
 %
