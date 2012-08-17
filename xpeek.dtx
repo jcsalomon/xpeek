@@ -92,6 +92,12 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 \NewDocumentCommand \fixsyntaxlines {}
   {\def\^^M{\unskip\space\ignorespaces}}
 
+^^A Miscellaneous PDF generation options
+\hypersetup{
+  pdfauthor={Joel C. Salomon},  ^^A No email address in meta-data
+  pdfstartview={FitH}           ^^A Fit horizontal (to width)
+}
+
 \begin{document}
   \DocInput{\jobname.dtx}
 \end{document}
