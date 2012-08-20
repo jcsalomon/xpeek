@@ -364,14 +364,14 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 %   \begin{IVerbatim}[gobble=6]
 %     \xpeek_collect_do:nn { abc } { \foo \bar } caada
 %   \end{IVerbatim}
-%   will collect the leading “\texttt{caa}” from the input stream
+%   will collect the leading “|caa|” from the input stream
 %   and pass those tokens as an argument to
 %   the operation “|\foo \bar|”.
 %   \Ie, the code above is equivalent to this:
 %   \begin{IVerbatim}[gobble=6]
 %     \foo \bar { caa } da
 %   \end{IVerbatim}
-%   (Note that it’s \cs{bar} \emph{within} the \Arg{operation}
+%   (Note that it’s |\bar| \emph{within} the \Arg{operation}
 %    that gets the collected tokens as an argument.)
 % \end{function}
 %
