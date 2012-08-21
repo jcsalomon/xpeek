@@ -127,7 +127,6 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 %     \tl_map_inline:Nn, \tl_map_break:,
 %     \c_empty_tl,
 %     \token_if_eq_charcode:NNT,
-%     \xsp, \c_xsp_exceptions_tl,
 %     \xpeek_if_in:NN,
 %   }
 %
@@ -668,6 +667,8 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 %
 % \subsection{Emulating \cs{xspace}}
 %
+% \begin{macro}[internal]{\xsp}
+% \begin{variable}[aux]{\c_xsp_exceptions_tl}
 % Define a simple analogue to \cs{xspace}.
 %    \begin{macrocode}
 \ExplSyntaxOn
@@ -682,6 +683,8 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
   }
 \ExplSyntaxOff
 %    \end{macrocode}
+% \end{variable}
+% \end{macro}
 % Test \cs{xsp}, ensuring that it is space-factor–agnostic.
 %    \begin{macrocode}
 \begin{qstest}{Emulating \xspace}{xpeek}
