@@ -98,6 +98,11 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
   pdfstartview={FitH}           ^^A Fit horizontal (to width)
 }
 
+^^A Reset line numbers in code listings for test-suite
+\makeatletter
+\@addtoreset{CodelineNo}{section}
+\makeatother
+
 \begin{document}
   \DocInput{\jobname.dtx}
 \end{document}
@@ -619,11 +624,6 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 % \section{Test Suite}
 %
 % \changes{Version 0.2}{2012/08/15}{Added test-suite}
-%
-% ^^A Reset line numbers in code listings
-% \makeatletter
-% \c@CodelineNo 0
-% \makeatother
 %
 % The test suite below is run automatically
 % when this document is produced.
