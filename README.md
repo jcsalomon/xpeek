@@ -1,15 +1,23 @@
 `xpeek`: Define commands that peek ahead in the input stream
 ============================================================
 
-The `xpeek` package provides tools to help define commands that,
-like [`\xspace`][1], peek at what follows them in the command stream
+The `xpeek` package provides tools
+to help define commands that,
+like the familiar `\xspace`
+(from [`xspace`](http://ctan.org/pkg/xspace))
+and the LaTeX command `\textit`,
+“peek” ahead at what follows them in the command stream,
+compare this token against a stored token-list,
 and choose appropriate behavior.
 
-The code is adapted from an answer posted to [TeX.SX][2] by
-Enrico “egreg” Gregorio at <http://tex.stackexchange.com/a/59542/2966>,
-with modifications according to suggestions & contributions by
-Enrico, Joseph Wright, Bruno Le Floch, & Clemens Niederberger;
-see <http://tex.stackexchange.com/q/63568/2966>
+The code is adapted from an answer posted to [TeX.SX][TeXSX] by
+Enrico “egreg” Gregorio at <http://tex.stackexchange.com/a/59542/2966>.
+Enrico, Joseph Wright, Bruno Le Floch, & Clemens Niederberger
+helped iron out the implementation;
+Bruno also wrote the initial version of the documentation
+and the near-final version of much of the code.
+See <http://tex.stackexchange.com/q/63568/2966>,
+<http://tex.stackexchange.com/q/63971/2966>,
 and <http://thread.gmane.org/gmane.comp.tex.latex.latex3/2894>.
 
 Installation
@@ -61,5 +69,4 @@ of this license is at <http://www.latex-project.org/lppl.txt>.
 This work is “maintained” (_per_ LPPL maintenance status) by
 Joel C. Salomon <joelcsalomon@gmail.com>.
 
-[1]: http://ctan.org/pkg/xspace
-[2]: http://tex.stackexchange.com
+[TeXSX]: http://tex.stackexchange.com
