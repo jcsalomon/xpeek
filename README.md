@@ -20,6 +20,12 @@ See <http://tex.stackexchange.com/q/63568/2966>,
 <http://tex.stackexchange.com/q/63971/2966>,
 and <http://thread.gmane.org/gmane.comp.tex.latex.latex3/2894>.
 
+Development
+-----------
+
+The source-code repository and bug-tracker for this package
+may be found at <https://github.com/jcsalomon/xpeek>.
+
 Installation
 ------------
 
