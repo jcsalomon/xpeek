@@ -3,10 +3,17 @@
 % !TeX encoding = utf-8
 % !TeX spellcheck = en_US
 %<*internal>
-\begingroup
+\iffalse
+%</internal>
+%<*internal>
+\fi
+\def\nameofplainTeX{plain}
+\ifx\fmtname\nameofplainTeX\else
+  \expandafter\begingroup
+\fi
 %</internal>
 %<*install>
-\input{l3docstrip.tex}
+\input l3docstrip.tex
 \keepsilent
 \askforoverwritefalse
 \preamble
@@ -54,7 +61,11 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 \generate{
   \file{\jobname.ins}{\from{\jobname.dtx}{install}}
 }
-\endgroup
+\ifx\fmtname\nameofplainTeX
+  \expandafter\endbatchfile
+\else
+  \expandafter\endgroup
+\fi
 %</internal>
 %<*driver>
 \pdfobjcompresslevel=0
