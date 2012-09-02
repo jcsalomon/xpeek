@@ -657,7 +657,7 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 %
 % \subsection{Set-Up: Wrapping \cs{Expect}}
 %
-% \begin{macro}[internal]{\ExpectIdenticalWidths}
+% \begin{macro}[internal]{\ExpectEqualWidths}
 % Since the commands \pkg{xpeek} helps produce are not expandable,
 % directly comparing their outputs is not feasible.
 % Instead, typeset two versions into boxes
@@ -666,7 +666,7 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 %  see \url{http://tex.stackexchange.com/q/67192/2966}.)
 %    \begin{macrocode}
 \ExplSyntaxOn
-\NewDocumentCommand \ExpectIdenticalWidths { m m }
+\NewDocumentCommand \ExpectEqualWidths { m m }
   {
     \hbox_set:Nn \l_tmpa_box {#1}
     \hbox_set:Nn \l_tmpb_box {#2}
@@ -701,11 +701,11 @@ Joel C. Salomon ‹joelcsalomon@gmail.com›.
 % Test \cs{xsp}, ensuring that it is space-factor–agnostic.
 %    \begin{macrocode}
 \begin{qstest}{Emulating \xspace}{xpeek}
-  \ExpectIdenticalWidths{foo bar}{foo\xsp bar}
-  \ExpectIdenticalWidths{foo. bar}{foo\xsp. bar}
-  \ExpectIdenticalWidths{FOO. bar}{FOO\xsp. bar}
-  \ExpectIdenticalWidths{foo. bar}{foo.\xsp bar}
-  \ExpectIdenticalWidths{FOO. bar}{FOO.\xsp bar}
+  \ExpectEqualWidths{foo bar}{foo\xsp bar}
+  \ExpectEqualWidths{foo. bar}{foo\xsp. bar}
+  \ExpectEqualWidths{FOO. bar}{FOO\xsp. bar}
+  \ExpectEqualWidths{foo. bar}{foo.\xsp bar}
+  \ExpectEqualWidths{FOO. bar}{FOO.\xsp bar}
 \end{qstest}
 %    \end{macrocode}
 %
